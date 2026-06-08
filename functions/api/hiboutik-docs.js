@@ -3,7 +3,7 @@ export async function onRequest(context) {
     
     const HIBOUTIK_ACCOUNT = env.HIBOUTIK_ACCOUNT;
     const HIBOUTIK_EMAIL = env.HIBOUTIK_EMAIL;
-    const HIBOUTIK_KEY = env.HIBOUTIK_KEY;
+    const HIBOUTIK_KEY = env.HIBOUTIK_API_KEY;
 
     if (!HIBOUTIK_ACCOUNT || !HIBOUTIK_EMAIL || !HIBOUTIK_KEY) {
       return new Response("Missing env", { status: 500 });
