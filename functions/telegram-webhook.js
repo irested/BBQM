@@ -94,7 +94,8 @@ export async function onRequestPost(context) {
         // 2. Créer la vente
         const sale = await hFetch('/sales/', 'POST', {
           store_id: 1, // Store par défaut
-          customer_id: customerId
+          customer_id: customerId,
+          currency_code: "EUR"
         });
         const saleId = sale.sale_id || sale.id;
 
