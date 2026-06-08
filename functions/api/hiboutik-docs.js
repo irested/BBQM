@@ -10,7 +10,7 @@ export async function onRequest(context) {
     }
 
     const authHeader = "Basic " + btoa(`${HIBOUTIK_EMAIL}:${HIBOUTIK_KEY}`);
-    const baseUrl = `https://${HIBOUTIK_ACCOUNT}.hiboutik.com/api`;
+    const baseUrl = `https://${HIBOUTIK_ACCOUNT}.hiboutik.com/docapi/json/`;
 
     try {
       // Fetch the root API endpoint which usually returns the OpenAPI specification or list of endpoints
