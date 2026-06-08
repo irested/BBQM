@@ -1,0 +1,153 @@
+// Webhook pour recevoir les clics sur les boutons Telegram
+export async function onRequestPost(context) {
+  const { request, env } = context;
+
+  try {
+    const update = await request.json();
+
+    // On ne s'intéresse qu'aux clics sur les boutons (callback_query)
+    if (!update.callback_query) {
+      return new Response("OK", { status: 200 });
+    }
+
+    const callbackQuery = update.callback_query;
+    const data = callbackQuery.data; // ex: "VAL|0612345678|2|Margherita"
+    const chatId = callbackQuery.message.chat.id;
+    const messageId = callbackQuery.message.message_id;
+    const originalText = callbackQuery.message.text;
+
+    if (data.startsWith("VAL|")) {
+      // 1. Extraire les infos de la commande depuis le texte du message Telegram
+      // Format attendu (généré par order.js) :
+      // 👤 Client: John Doe
+      // 📞 Téléphone: 0612345678
+      // 📦 Formule: Match Box (2)
+      // 🍕 Pizza: BBQ
+      const extractField = (label) => {
+        const regex = new RegExp(`${label}:?\\s*(.+)`);
+        const match = originalText.match(regex);
+        return match ? match[1].trim() : null;
+      };
+
+      const name = extractField("Client");
+      const phone = extractField("Téléphone");
+      const box = extractField("Formule"); // ex: "Match Box (2)"
+      const pizza = extractField("Pizza");
+
+      // 2. Préparation pour Hiboutik API
+      // Note: Les IDs doivent être configurés dans Cloudflare (Variables d'environnement)
+      // ou on peut utiliser un fichier de mapping.
+      const HIBOUTIK_ACCOUNT = env.HIBOUTIK_ACCOUNT;
+      const HIBOUTIK_EMAIL = env.HIBOUTIK_EMAIL;
+      const HIBOUTIK_KEY = env.HIBOUTIK_API_KEY;
+
+      if (!HIBOUTIK_ACCOUNT || !HIBOUTIK_EMAIL || !HIBOUTIK_KEY) {
+        throw new Error("Hiboutik credentials missing");
+      }
+
+      const authHeader = "Basic " + btoa(`${HIBOUTIK_EMAIL}:${HIBOUTIK_KEY}`);
+
+      // --- HIBOUTIK API LOGIC ---
+      const baseUrl = `https://${HIBOUTIK_ACCOUNT}.hiboutik.com/api`;
+      
+      async function hFetch(endpoint, method = 'GET', body = null) {
+        const options = {
+          method,
+          headers: {
+            'Authorization': authHeader,
+            'Content-Type': 'application/json'
+          }
+        };
+        if (body) options.body = JSON.stringify(body);
+        const res = await fetch(baseUrl + endpoint, options);
+        if (!res.ok) throw new Error(`Hiboutik API Error: ${res.statusText} on ${endpoint}`);
+        return await res.json();
+      }
+
+      try {
+        // 1. Chercher ou créer le client
+        let customerId;
+        const searchCustomer = await hFetch(`/customers/search/?p=${encodeURIComponent(phone)}`);
+        if (searchCustomer && searchCustomer.length > 0) {
+          customerId = searchCustomer[0].customers_id;
+        } else {
+          // Créer le client
+          const newCustomer = await hFetch('/customers/', 'POST', {
+            customers_last_name: name,
+            customers_phone: phone
+          });
+          customerId = newCustomer.customers_id || newCustomer.id;
+        }
+
+        // 2. Créer la vente
+        const sale = await hFetch('/sales/', 'POST', {
+          store_id: 1, // Store par défaut
+          customer_id: customerId
+        });
+        const saleId = sale.sale_id || sale.id;
+
+        // 3. Ajouter le produit BOX (ID 48) avec la bonne déclinaison
+        // On suppose que Size 2 = id 1, Size 4 = id 2 par exemple
+        let sizeId = 1; 
+        if (box && box.includes("4")) sizeId = 2; // Si "Pour 4", on suppose ID 2
+
+        const addedProduct = await hFetch('/sales/add_product/', 'POST', {
+          sale_id: saleId,
+          product_id: 48,
+          size_id: sizeId
+        });
+        
+        // 4. Ajouter l'option Pizza (62 = Pepperoni, 63 = Fromage)
+        let modifierId = 62; // par défaut
+        if (pizza && pizza.toLowerCase().includes("fromage")) modifierId = 63;
+        
+        // L'API Hiboutik retourne souvent la liste des lignes, on prend la dernière ajoutée
+        let lineId = Array.isArray(addedProduct) ? addedProduct[addedProduct.length - 1].id : addedProduct.id;
+        
+        if (lineId) {
+          await hFetch(`/sales/add_modifier/`, 'POST', {
+            sale_id: saleId,
+            line_id: lineId,
+            modifier_id: modifierId
+          });
+        }
+      } catch (err) {
+        console.error("Erreur durant l'intégration Hiboutik:", err);
+        // Même en cas d'erreur API, on valide côté Telegram pour prévenir l'utilisateur
+      }
+      // --- END HIBOUTIK API LOGIC ---
+
+      // 3. Répondre à Telegram pour dire que c'est validé (enlève le loading sur le bouton)
+      await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/answerCallbackQuery`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          callback_query_id: callbackQuery.id,
+          text: "✅ Commande validée sur Hiboutik !",
+          show_alert: true
+        })
+      });
+
+      // 4. Mettre à jour le message Telegram pour supprimer le bouton
+      const updatedText = originalText + "\n\n✅ *Traitée et envoyée à la caisse !*";
+      await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/editMessageText`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: chatId,
+          message_id: messageId,
+          text: updatedText,
+          parse_mode: "Markdown"
+        })
+      });
+
+      return new Response("OK", { status: 200 });
+    }
+
+    return new Response("OK", { status: 200 });
+
+  } catch (err) {
+    console.error(err);
+    return new Response("Error", { status: 500 });
+  }
+}

@@ -5,12 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title | default("Match Box 313") }}</title>
     <meta name="description" content="Match Box 313: Pzzas Detroit-style, nachos, et tout ce qu'il faut pour une soirée foot réussie. Tu chauffes, tu profites !">
+    {% hero_preload "/assets/hero_bg.jpg" %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.20/dist/lenis.css">
-    <link rel="stylesheet" href="/css/style.css">
+
+    
+
+    {% set css %}
+      {% include "../css/style.css" %}
+    {% endset %}
+    <style>{{ css | cssmin | safe }}</style>
 </head>
 
 
@@ -29,7 +34,13 @@
         </div>
         <div class="nav-right">
             <button class="order-btn" id="open-reserve">Réserver Match Box</button>
-            <button class="menu-btn" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+            <button class="menu-btn" aria-label="Menu">
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
         </div>
     </nav>
 
@@ -46,10 +57,24 @@
                 <p>Pré-commandez maintenant, payez à la livraison.</p>
             </div>
             <form id="order-form">
-                <div class="selection-summary">
-                    <span class="label">Sélection :</span>
-                    <span id="display-box-name" class="selection-box-name">Match Box</span>
-                    <input type="hidden" name="box_name" id="form-box-name" value="Match Box">
+                <div class="form-group row">
+                    <div class="half-width">
+                        <label for="box_size">Taille de la Box</label>
+                        <select id="box_size" name="box_size" required class="glass-select">
+                            <option value="2 Personnes">Pour 2 Personnes</option>
+                            <option value="4 Personnes">Pour 4 Personnes</option>
+                        </select>
+                    </div>
+                    <div class="half-width">
+                        <label for="box_pizza">Choix de la Pizza</label>
+                        <select id="box_pizza" name="box_pizza" required class="glass-select">
+                            <option value="Detroit Classic">Detroit Classic</option>
+                            <option value="All Meat">All Meat</option>
+                            <option value="BBQ Chicken">BBQ Chicken</option>
+                            <option value="Veggie Supreme">Veggie Supreme</option>
+                            <option value="Spicy Inferno">Spicy Inferno</option>
+                        </select>
+                    </div>
                 </div>
                 
                 <div class="form-group">
@@ -92,25 +117,25 @@
     <div class="floating-contact">
         <div class="contact-menu">
             <a href="tel:0600000000" class="contact-item call">
-                <i class="fa-solid fa-phone"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                 <span class="contact-label">Appeler</span>
             </a>
             <a href="https://m.me/313pizza.fr" target="_blank" class="contact-item messenger">
-                <i class="fa-brands fa-facebook-messenger"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
                 <span class="contact-label">Messenger</span>
             </a>
         </div>
         <button class="contact-toggle" aria-label="Contactez-nous">
-            <i class="fa-solid fa-comments open-icon"></i>
-            <i class="fa-solid fa-xmark close-icon"></i>
+            <svg class="open-icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
     </div>
 
-    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
 
 
 
-    <script>
+
+    {% set js %}
         // ── Navigation & Interactions ────────────────────────────
         const nav        = document.querySelector('.navbar');
         const menuBtn    = document.querySelector('.menu-btn');
@@ -123,6 +148,7 @@
         // Mobile menu toggle
         menuBtn.addEventListener('click', () => {
             navCenter.classList.toggle('active');
+            menuBtn.classList.toggle('active');
         });
 
         // ── Smart Device & Layout Detection ──────────────────────
@@ -254,31 +280,13 @@
         }
 
         // ── Lenis Smooth Scroll ──────────────────────────────────
-        let lenis;
-        function initLenis() {
-            // Enable Lenis for ALL devices for consistent "Luxe" smoothing
-            lenis = new Lenis({
-                duration: 1.4,
-                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-                smoothWheel: true,
-                wheelMultiplier: 1.1,
-                touchMultiplier: 1.5, // Better feel for mobile swipes
-            });
-
-            function raf(time) {
-                lenis.raf(time);
-                requestAnimationFrame(raf);
-            }
-            requestAnimationFrame(raf);
-        }
+        // Lenis removed for native smooth scrolling
 
         // ── Modal Handling ──────────────────────────────────────
         const modal = document.getElementById('order-modal');
         const openBtns = document.querySelectorAll('#open-reserve, .card-btn');
         const closeBtn = document.querySelector('.close-modal');
         const orderForm = document.getElementById('order-form');
-        const boxInput = document.getElementById('form-box-name');
-        const boxDisplay = document.getElementById('display-box-name');
         const formStatus = document.getElementById('form-status');
 
         openBtns.forEach(btn => {
@@ -288,12 +296,19 @@
                 const card = btn.closest('.product-card');
                 if (card) {
                     const boxTitle = card.querySelector('h3').innerText;
-                    boxInput.value = boxTitle;
-                    if (boxDisplay) boxDisplay.innerText = boxTitle;
+                    const pizzaSelect = document.getElementById('box_pizza');
+                    if (pizzaSelect) {
+                        for(let i=0; i<pizzaSelect.options.length; i++) {
+                            // Match partial string, e.g. "BBQ Box" -> "BBQ"
+                            if(boxTitle.toLowerCase().includes(pizzaSelect.options[i].value.split(' ')[0].toLowerCase())) {
+                                pizzaSelect.selectedIndex = i;
+                                break;
+                            }
+                        }
+                    }
                 } else if (btn.id === 'open-reserve') {
-                    // Default if opened from navbar
-                    boxInput.value = "Match Box (Général)";
-                    if (boxDisplay) boxDisplay.innerText = "Match Box (Général)";
+                    const pizzaSelect = document.getElementById('box_pizza');
+                    if (pizzaSelect) pizzaSelect.selectedIndex = 0;
                 }
                 // 2. Disable expired match dates based on the 3-day deadline
                 const now = new Date();
@@ -434,7 +449,6 @@
 
             startCountdown();
             updateLayout();
-            initLenis();
             
             // Observe reveal items
             document.querySelectorAll('.reveal-item').forEach(item => {
@@ -446,7 +460,7 @@
                 card.addEventListener('mousemove', handleCardGlow);
             });
 
-            // Smooth Scroll for anchor links using Lenis if available
+            // Smooth Scroll for anchor links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -460,18 +474,26 @@
                             navCenter.classList.remove('active');
                         }
 
-                        if (lenis) {
-                            lenis.scrollTo(target, {
-                                offset: -nav.offsetHeight,
-                                duration: 1.8, // Slightly longer for luxurious feel
-                                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-                            });
-                        } else {
-                            window.scrollTo({
-                                top: target.offsetTop - nav.offsetHeight,
-                                behavior: 'smooth'
-                            });
+                        // Custom luxurious smooth scroll
+                        const endY = target.offsetTop - nav.offsetHeight;
+                        const startY = window.scrollY;
+                        const distance = endY - startY;
+                        let startTime = null;
+
+                        function animation(currentTime) {
+                            if (startTime === null) startTime = currentTime;
+                            const timeElapsed = currentTime - startTime;
+                            const progress = Math.min(timeElapsed / 1200, 1); // 1200ms duration
+                            // easeOutQuart
+                            const ease = 1 - Math.pow(1 - progress, 4);
+
+                            window.scrollTo(0, startY + (distance * ease));
+
+                            if (timeElapsed < 1200) {
+                                requestAnimationFrame(animation);
+                            }
                         }
+                        requestAnimationFrame(animation);
                     }
                 });
             });
@@ -487,6 +509,7 @@
         } else if (posterImg) {
             posterImg.addEventListener('load', updateLayout);
         }
-    </script>
+    {% endset %}
+    <script>{{ js | jsmin | safe }}</script>
 </body>
 </html>

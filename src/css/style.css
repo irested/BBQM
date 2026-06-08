@@ -21,6 +21,10 @@ html {
     scroll-behavior: smooth;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: var(--font-main);
     background-color: var(--bg-dark);
@@ -146,12 +150,45 @@ a {
 }
 
 .menu-btn {
+    display: none;
     background: none;
     border: none;
-    color: var(--text-main);
+    color: var(--text-light);
     font-size: 1.5rem;
     cursor: pointer;
-    display: none;
+    padding: 0.5rem;
+    z-index: 101; /* Ensure button stays on top */
+    position: relative;
+}
+
+.hamburger {
+    width: 24px;
+    height: 18px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.hamburger span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: currentColor;
+    border-radius: 2px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+}
+
+.menu-btn.active .hamburger span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.menu-btn.active .hamburger span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-btn.active .hamburger span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
 }
 
 /* ============================================================
@@ -345,6 +382,14 @@ a {
     font-size: 3.5rem;
     text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
     margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.section-title svg {
+    margin-left: 0.5rem;
 }
 
 .section-subtitle {
@@ -587,12 +632,10 @@ a {
     align-items: center;
     justify-content: center;
     font-size: 1.8rem;
-    color: rgba(255, 255, 255, 0.2);
-    /* Semi-transparent color for content only */
+    color: rgba(255, 255, 255, 0.5); /* Improved contrast */
     transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     z-index: 10;
-    /* Definitely above the progress line */
     transform: scale(0.9);
 }
 
@@ -966,6 +1009,22 @@ a {
 
 .form-group {
     margin-bottom: 1.5rem;
+}
+
+.form-group.row {
+    display: flex;
+    gap: 1rem;
+}
+
+.half-width {
+    flex: 1;
+}
+
+@media (max-width: 480px) {
+    .form-group.row {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
 }
 
 .form-group label {

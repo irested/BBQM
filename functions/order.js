@@ -9,16 +9,16 @@ export async function onRequestPost(context) {
     return new Response("Invalid JSON", { status: 400 });
   }
 
-  const { name, phone, address, box_name, match_date } = data;
+  const { name, phone, address, box_size, box_pizza, match_date } = data;
 
   // 2. Validate essential fields
-  if (!name || !phone || !address) {
+  if (!name || !phone || !address || !box_size || !box_pizza) {
     return new Response("Missing fields", { status: 400 });
   }
 
   // 3. Prepare Telegram Payload
   const botToken = env.TELEGRAM_BOT_TOKEN;
-  const chatId = "-5165917777"; // Group Chat ID
+  const chatId = env.TELEGRAM_CHAT_ID;
 
   if (!botToken) {
     console.error("TELEGRAM_BOT_TOKEN is not set in environment variables.");
@@ -34,7 +34,8 @@ export async function onRequestPost(context) {
 🍕 *Nouvelle Pré\\-commande \\!*
 👤 *Client:* ${escapeMD(name)}
 📞 *Téléphone:* ${escapeMD(phone)}
-📦 *Produit:* ${escapeMD(box_name)}
+📦 *Formule:* Match Box \\(${escapeMD(box_size)}\\)
+🍕 *Pizza:* ${escapeMD(box_pizza)}
 🕒 *Date:* ${escapeMD(match_date)}
 📍 *Adresse:* ${escapeMD(address)}
 `;
@@ -48,9 +49,8 @@ export async function onRequestPost(context) {
         [
           {
             text: "✅ Valider (Envoi vers Hiboutik)",
-            // We will pack the essential data in the callback_data later (max 64 bytes)
-            // For now, it's just a placeholder action
-            callback_data: `VAL|${phone}|${box_name.substring(0,20)}`
+            // We pack phone and a short version of pizza/size just to identify it
+            callback_data: `VAL|${phone}|${box_size.substring(0,1)}|${box_pizza.substring(0,10)}`
           }
         ]
       ]

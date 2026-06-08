@@ -3,7 +3,7 @@ layout: base.njk
 title: Match Box 313 | Match Night, zéro effort
 ---
 <div class="poster-container">
-    {% image "/assets/new_bg.png", "Match Box 313", "(max-width: 2000px) 100vw, 2000px", "poster-img", "eager" %}
+    {% image "/assets/hero_bg.jpg", "Match Box 313", "(max-width: 2000px) 100vw, 2000px", "poster-img", "eager" %}
 
 
 
@@ -13,13 +13,13 @@ title: Match Box 313 | Match Night, zéro effort
     <!-- Hero Section -->
     <header class="hero">
         <div class="hero-content">
-            <span class="hero-badge"><i class="fa-solid fa-futbol"></i> &nbsp;Detroit-style · Soccer Night</span>
+            <span class="hero-badge"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 7l4.76 3.46-1.82 5.54H9.06l-1.82-5.54L12 7z"></path></svg> &nbsp;Detroit-style · Soccer Night</span>
             <h1 class="hero-title">Match Night,<br><span class="highlight">zéro effort</span></h1>
             <p class="hero-subtitle">Tout est prêt. Tu chauffes. Tu profites.</p>
-            <a href="#products" class="cta-btn">Commander ma Match Box <i class="fa-solid fa-fire"></i></a>
+            <a href="#products" class="cta-btn">Commander ma Match Box <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></a>
             <div class="scroll-hint">
                 <span>Découvrir les box</span>
-                <i class="fa-solid fa-chevron-down"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </div>
         </div>
     </header>
@@ -29,8 +29,8 @@ title: Match Box 313 | Match Night, zéro effort
 <section id="products" class="products">
     <div class="container">
         <div class="section-header reveal-item">
-            <h2 class="section-title">Nos Box best-sellers <i class="fa-solid fa-pizza-slice nav-icon" style="color:var(--primary-accent)"></i></h2>
-            <p class="section-subtitle">Conçues pour le match. Livrées prêtes à chauffer.</p>
+            <h2 class="section-title">La Match Box <svg class="nav-icon" style="color:var(--primary-accent)" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 11h.01"/><path d="M11 15h.01"/><path d="M16 16h.01"/><path d="m2 16 20 6-6-20A20 20 0 0 0 2 16"/></svg></h2>
+            <p class="section-subtitle">Choisissez votre format. Les cadeaux sont pour nous.</p>
             
             <!-- In-section Countdown -->
             <div id="countdown-ticker" class="section-countdown" style="display: none;">
@@ -40,15 +40,14 @@ title: Match Box 313 | Match Night, zéro effort
                 </div>
             </div>
         </div>
-        <div class="product-grid">
+        
+        <div class="product-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 450px)); justify-content: center;">
             {% for box in boxes %}
             <div class="product-card reveal-item">
                 <div class="card-img-wrap">
                     {% image box.image, box.title, "(max-width: 768px) 100vw, 33vw", "card-img" %}
                     <span class="price-tag">{{ box.price }}</span>
                 </div>
-
-
 
                 <div class="card-info">
                     <h3>{{ box.title }}</h3>
@@ -77,25 +76,25 @@ title: Match Box 313 | Match Night, zéro effort
             <div class="step-card reveal-item">
                 <p class="step-number">01</p>
                 <div class="step-icon">
-                    <i class="fa-solid fa-mobile-screen"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
                 </div>
-                <h4>Commandez ta Box</h4>
+                <h3>Commandez ta Box</h3>
                 <p>Choisis ta box préférée et reçois-la rapidement chez toi, prête à être chauffée.</p>
             </div>
             <div class="step-card reveal-item">
                 <p class="step-number">02</p>
                 <div class="step-icon">
-                    <i class="fa-solid fa-fire-burner"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>
                 </div>
-                <h4>Chauffez sans stress</h4>
+                <h3>Chauffez sans stress</h3>
                 <p>Quelques minutes au four — et ta pizza Detroit-style croustille à la perfection.</p>
             </div>
             <div class="step-card reveal-item">
                 <p class="step-number">03</p>
                 <div class="step-icon">
-                    <i class="fa-regular fa-face-laugh-squint"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
                 </div>
-                <h4>Savourez le match</h4>
+                <h3>Savourez le match</h3>
                 <p>Installe-toi, share avec tes amis et profite pleinement de chaque minute de jeu !</p>
             </div>
         </div>
@@ -113,21 +112,21 @@ title: Match Box 313 | Match Night, zéro effort
                     <span class="rating-max">/5</span>
                 </div>
                 <div class="stars">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star-half-stroke"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                 </div>
                 <p class="rating-source">Moyenne des avis Food Truck</p>
                 <div class="trust-badge">
-                    <i class="fa-brands fa-google"></i> Verified Reviews
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12c0-1-.1-2-.3-2.9H12v5.5h5.7c-.2 1.3-1 2.5-2.1 3.3v2.8h3.4c2-1.8 3.1-4.5 3.1-7.7z"></path></svg> Verified Reviews
                 </div>
             </div>
 
             <!-- Featured Testimonial -->
             <div class="review-main reveal-item">
-                <i class="fa-solid fa-quote-left quote-icon"></i>
+                <svg class="quote-icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"></path></svg>
                 <p class="review-text">
                     "Accueil chaleureux, agréable et souriant, rien à redire. Les pizzas sont excellentes et bien fournies. Jamais déçu, hâte d'être à la journée pizza car on se régale à chaque commande. Je recommande à 1000% !"
                 </p>
@@ -137,9 +136,9 @@ title: Match Box 313 | Match Night, zéro effort
             <!-- Chef's Note -->
             <div class="chef-note-card reveal-item">
                 <div class="chef-avatar">
-                    <i class="fa-solid fa-fire"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>
                 </div>
-                <h4>Le mot du Chef</h4>
+                <h3>Le mot du Chef</h3>
                 <p>
                     "Dans mes Match Box, la pizza Detroit n'est que le début. Tout tourne autour de la qualité : mes <strong>viandes fumées maison</strong> et mes <strong>entrées artisanales</strong> sont au cœur de l'expérience. C'est cette même exigence que vous retrouvez chaque jour à mon Food Truck."
                 </p>
@@ -152,7 +151,7 @@ title: Match Box 313 | Match Night, zéro effort
 <section id="menu-gallery" class="gallery-section">
     <div class="container">
         <div class="section-header reveal-item">
-            <h2 class="section-title">L'Ardoise du Chef <i class="fa-solid fa-camera nav-icon" style="color:var(--primary-accent)"></i></h2>
+            <h2 class="section-title">L'Ardoise du Chef <svg class="nav-icon" style="color:var(--primary-accent)" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg></h2>
             <p class="section-subtitle">Focus sur nos pépites fumées et croustillantes.</p>
         </div>
         
@@ -166,7 +165,7 @@ title: Match Box 313 | Match Night, zéro effort
 
 
                         <div class="gallery-info">
-                            <h4>{{ item.title }}</h4>
+                            <h3>{{ item.title }}</h3>
                             <p>{{ item.description }}</p>
                         </div>
                     </div>
@@ -181,36 +180,36 @@ title: Match Box 313 | Match Night, zéro effort
 <section id="community" class="social-section">
     <div class="container">
         <div class="section-header reveal-item">
-            <h2 class="section-title">Rejoignez la team 313 <i class="fa-solid fa-users nav-icon" style="color:var(--primary-accent)"></i></h2>
+            <h2 class="section-title">Rejoignez la team 313 <svg class="nav-icon" style="color:var(--primary-accent)" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></h2>
             <p class="section-subtitle">Suivez nos aventures et partagez vos Match Box.</p>
         </div>
 
         <div class="social-grid">
             <!-- Facebook -->
             <a href="https://www.facebook.com/313pizza.fr/" target="_blank" class="social-card fb reveal-item">
-                <div class="social-icon"><i class="fa-brands fa-facebook"></i></div>
+                <div class="social-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></div>
                 <div class="social-content">
-                    <h4>Facebook</h4>
+                    <h3>Facebook</h3>
                     <p>Actu, évènements et photos de la communauté.</p>
                 </div>
-                <div class="social-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+                <div class="social-arrow"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></div>
             </a>
 
             <!-- Instagram -->
             <a href="https://www.instagram.com/313pizza.fr/" target="_blank" class="social-card ig reveal-item">
-                <div class="social-icon"><i class="fa-brands fa-instagram"></i></div>
+                <div class="social-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></div>
                 <div class="social-content">
-                    <h4>Instagram</h4>
+                    <h3>Instagram</h3>
                     <p>Le plein de foodporn avant le coup d'envoi.</p>
                 </div>
-                <div class="social-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+                <div class="social-arrow"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></div>
             </a>
 
             <!-- Discord (Internal Link or Placeholder) -->
             <div class="social-card discord reveal-item">
-                <div class="social-icon"><i class="fa-brands fa-discord"></i></div>
+                <div class="social-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="1"></circle><circle cx="15" cy="12" r="1"></circle><path d="M7.5 7.5c3.5-1 5.5-1 9 0"></path><path d="M7 16.5c3.5 1 6.5 1 10 0"></path><path d="M15.5 17c0 1 1.5 3 2 3 1.5 0 2.833-1.667 3.5-3 .667-1.667.5-5.833-1.5-11.5-1.457-1.015-3-1.34-4.5-1.5l-1 2.5"></path><path d="M8.5 17c0 1-1.5 3-2 3-1.5 0-2.833-1.667-3.5-3-.667-1.667-.5-5.833 1.5-11.5 1.457-1.015 3-1.34 4.5-1.5l1 2.5"></path></svg></div>
                 <div class="social-content">
-                    <h4>Discord</h4>
+                    <h3>Discord</h3>
                     <p>Le salon privé arrive bientôt pour le Mondial !</p>
                 </div>
                 <span class="social-badge">À venir</span>

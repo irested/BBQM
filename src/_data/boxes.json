@@ -1,20 +1,14 @@
 [
     {
-        "title": "Match Box",
+        "title": "Match Box (Pour 2)",
         "image": "/assets/match_box.png",
-        "price": "24.90€",
-        "description": "Detroit-style classique, loaded nachos cheddar & jalapeños. L'incontournable du match."
+        "price": "29.90€",
+        "description": "1 Pizza Detroit au choix, 1 side américain (Nachos/Wings) et 2 boissons offertes pour le match."
     },
     {
-        "title": "All Meat Box",
+        "title": "Match Box (Pour 4)",
         "image": "/assets/all_meat.png",
-        "price": "26.90€",
-        "description": "Pepperoni, saucisse, bacon sur pâte aérée et bords fromagés ultra croustillants."
-    },
-    {
-        "title": "BBQ Box",
-        "image": "/assets/bbq.png",
-        "price": "25.90€",
-        "description": "Poulet grillé, oignons rouges et filet de sauce BBQ douce. La touche américaine."
+        "price": "54.90€",
+        "description": "2 Pizzas Detroit au choix, 2 sides au choix, 4 boissons offertes et les desserts offerts !"
     }
 ]

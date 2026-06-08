@@ -11,6 +11,9 @@
     "@11ty/eleventy": "^2.0.1"
   },
   "dependencies": {
-    "@11ty/eleventy-img": "^6.0.4"
+    "@11ty/eleventy-img": "^6.0.4",
+    "@fortawesome/fontawesome-free": "^7.2.0",
+    "clean-css": "^5.3.3",
+    "terser": "^5.48.0"
   }
 }
