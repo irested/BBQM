@@ -133,12 +133,12 @@ export async function onRequestPost(context) {
         // Fallback si non trouvé
         if (!modifierId) modifierId = 62;
         
-        // L'API Hiboutik retourne souvent la liste des lignes, on prend la dernière ajoutée
-        let lineId = Array.isArray(addedProduct) ? addedProduct[addedProduct.length - 1].id : addedProduct.id;
-        
-        // Si .id n'existe pas, on cherche d'autres noms possibles
-        if (!lineId && addedProduct) {
-            lineId = addedProduct.sale_item_id || addedProduct.line_id;
+        // L'API Hiboutik retourne l'ID de la ligne sous le nom "id_sale_product_detail"
+        let lineId = null;
+        if (Array.isArray(addedProduct)) {
+            lineId = addedProduct[addedProduct.length - 1].id_sale_product_detail || addedProduct[addedProduct.length - 1].id;
+        } else if (addedProduct) {
+            lineId = addedProduct.id_sale_product_detail || addedProduct.id;
         }
 
         // Si on ne trouve toujours pas la ligne, on lève une erreur pour voir ce que l'API a répondu
@@ -147,11 +147,21 @@ export async function onRequestPost(context) {
         }
         
         if (lineId && modifierId) {
-          await hFetch(`/sales/add_modifier/`, 'POST', {
-            sale_id: saleId,
-            line_id: lineId,
-            modifier_id: modifierId
-          });
+          try {
+            await hFetch(`/sales/add_modifier/`, 'POST', {
+              sale_id: saleId,
+              line_id: lineId, // Souvent c'est line_id dans Hiboutik
+              modifier_id: modifierId
+            });
+          } catch (modifierErr) {
+            // Si line_id ne marche pas, peut-être que l'API attend id_sale_product_detail ou sale_item_id
+            console.error("Erreur avec line_id, essai avec id_sale_product_detail", modifierErr);
+            await hFetch(`/sales/add_modifier/`, 'POST', {
+              sale_id: saleId,
+              id_sale_product_detail: lineId,
+              modifier_id: modifierId
+            });
+          }
         }
 
         // 3. Répondre à Telegram pour dire que c'est validé
