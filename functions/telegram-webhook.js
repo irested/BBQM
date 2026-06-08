@@ -148,19 +148,10 @@ export async function onRequestPost(context) {
         
         if (lineId && modifierId) {
           try {
-            await hFetch(`/sales/add_modifier/`, 'POST', {
-              sale_id: saleId,
-              line_id: lineId, // Souvent c'est line_id dans Hiboutik
-              modifier_id: modifierId
-            });
+            await hFetch(`/sale_line_item_modifier/${lineId}/${modifierId}/`, 'POST');
           } catch (modifierErr) {
-            // Si line_id ne marche pas, peut-être que l'API attend id_sale_product_detail ou sale_item_id
-            console.error("Erreur avec line_id, essai avec id_sale_product_detail", modifierErr);
-            await hFetch(`/sales/add_modifier/`, 'POST', {
-              sale_id: saleId,
-              id_sale_product_detail: lineId,
-              modifier_id: modifierId
-            });
+            console.error("Erreur ajout modifier", modifierErr);
+            throw new Error("Impossible d'ajouter la pizza (modifier). API: " + modifierErr.message);
           }
         }
 
