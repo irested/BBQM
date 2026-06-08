@@ -136,6 +136,16 @@ export async function onRequestPost(context) {
         // L'API Hiboutik retourne souvent la liste des lignes, on prend la dernière ajoutée
         let lineId = Array.isArray(addedProduct) ? addedProduct[addedProduct.length - 1].id : addedProduct.id;
         
+        // Si .id n'existe pas, on cherche d'autres noms possibles
+        if (!lineId && addedProduct) {
+            lineId = addedProduct.sale_item_id || addedProduct.line_id;
+        }
+
+        // Si on ne trouve toujours pas la ligne, on lève une erreur pour voir ce que l'API a répondu
+        if (!lineId) {
+            throw new Error("Impossible de trouver l'ID de la ligne. Reponse API: " + JSON.stringify(addedProduct).substring(0, 100));
+        }
+        
         if (lineId && modifierId) {
           await hFetch(`/sales/add_modifier/`, 'POST', {
             sale_id: saleId,
