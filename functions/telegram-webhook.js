@@ -115,7 +115,8 @@ export async function onRequestPost(context) {
         const addedProduct = await hFetch('/sales/add_product/', 'POST', {
           sale_id: saleId,
           product_id: 48,
-          size_id: sizeId
+          size_id: sizeId,
+          stock_withdrawal: 1
         });
         
         // 4. Ajouter l'option Pizza (Recherche dynamique de l'ID par nom)
@@ -155,28 +156,26 @@ export async function onRequestPost(context) {
         });
 
         // 4. Mettre à jour le message Telegram pour supprimer le bouton
-        const debugInfo = `\nDebug: LineId=${lineId} ModId=${modifierId}\nAdded: ${JSON.stringify(addedProduct).substring(0, 50)}`;
-        const updatedText = originalText + "\n\n✅ *Traitée et envoyée à la caisse !*" + debugInfo;
+        const updatedText = originalText + "\n\n✅ Traitée et envoyée à la caisse !";
         await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/editMessageText`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             chat_id: chatId,
             message_id: messageId,
-            text: updatedText,
-            parse_mode: "Markdown"
+            text: updatedText
           })
         });
 
       } catch (err) {
         console.error("Erreur durant l'intégration Hiboutik:", err);
-        // Informer Telegram de l'erreur avec les détails
+        // Informer Telegram de l'erreur avec les détails (SANS MARKDOWN POUR NE PAS PLANTER TELEGRAM)
         await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/answerCallbackQuery`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             callback_query_id: callbackQuery.id,
-            text: "❌ Erreur de synchronisation avec la caisse.",
+            text: "❌ Erreur de synchronisation.",
             show_alert: true
           })
         });
@@ -188,8 +187,7 @@ export async function onRequestPost(context) {
           body: JSON.stringify({
             chat_id: chatId,
             message_id: messageId,
-            text: originalText + `\n\n❌ *Erreur lors de l'envoi à la caisse.*\n\`${errMsg}\``,
-            parse_mode: "Markdown"
+            text: originalText + `\n\n❌ Erreur lors de l'envoi à la caisse:\n${errMsg}`
           })
         });
         
