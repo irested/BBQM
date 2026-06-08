@@ -78,12 +78,12 @@ export async function onRequestPost(context) {
         } else {
           // Créer le client
           const newCustomer = await hFetch('/customers/', 'POST', {
-            customers_first_name: firstName || "",
-            customers_last_name: lastName || "Inconnu",
-            customers_phone: phone,
-            customers_address: address || "",
-            customers_zip: zip || "",
-            customers_city: city || ""
+            first_name: firstName || "",
+            last_name: lastName || "Inconnu",
+            phone: phone,
+            address: address || "",
+            zipcode: zip || "",
+            city: city || ""
           });
           customerId = newCustomer.customers_id || newCustomer.id;
         }
@@ -140,11 +140,33 @@ export async function onRequestPost(context) {
         }
       } catch (err) {
         console.error("Erreur durant l'intégration Hiboutik:", err);
-        // Même en cas d'erreur API, on valide côté Telegram pour prévenir l'utilisateur
+        // Informer Telegram de l'erreur
+        await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/answerCallbackQuery`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            callback_query_id: callbackQuery.id,
+            text: "❌ Erreur de synchronisation avec la caisse.",
+            show_alert: true
+          })
+        });
+
+        await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/editMessageText`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: chatId,
+            message_id: messageId,
+            text: originalText + "\n\n❌ *Erreur lors de l'envoi à la caisse. Vérifiez manuellement.*",
+            parse_mode: "Markdown"
+          })
+        });
+        
+        return new Response("OK", { status: 200 });
       }
       // --- END HIBOUTIK API LOGIC ---
 
-      // 3. Répondre à Telegram pour dire que c'est validé (enlève le loading sur le bouton)
+      // 3. Répondre à Telegram pour dire que c'est validé
       await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/answerCallbackQuery`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
