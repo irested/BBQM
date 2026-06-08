@@ -183,7 +183,8 @@ export async function onRequestPost(context) {
       });
 
       // 4. Mettre à jour le message Telegram pour supprimer le bouton
-      const updatedText = originalText + "\n\n✅ *Traitée et envoyée à la caisse !*";
+      const debugInfo = `\nDebug LineId: ${lineId} | ModId: ${modifierId}\nAddedProduct: ${JSON.stringify(addedProduct).substring(0, 50)}`;
+      const updatedText = originalText + "\n\n✅ *Traitée et envoyée à la caisse !*" + debugInfo;
       await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/editMessageText`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
