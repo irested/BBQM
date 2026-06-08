@@ -68,11 +68,7 @@
                     <div class="half-width">
                         <label for="box_pizza">Choix de la Pizza</label>
                         <select id="box_pizza" name="box_pizza" required class="glass-select">
-                            <option value="Detroit Classic">Detroit Classic</option>
-                            <option value="All Meat">All Meat</option>
-                            <option value="BBQ Chicken">BBQ Chicken</option>
-                            <option value="Veggie Supreme">Veggie Supreme</option>
-                            <option value="Spicy Inferno">Spicy Inferno</option>
+                            <option value="">Chargement des pizzas...</option>
                         </select>
                     </div>
                 </div>
@@ -511,5 +507,28 @@
         }
     {% endset %}
     <script>{{ js | jsmin | safe }}</script>
+    <script>
+        // Fetch dynamic pizzas from Hiboutik
+        document.addEventListener("DOMContentLoaded", () => {
+            const pizzaSelect = document.getElementById("box_pizza");
+            if(pizzaSelect) {
+                fetch("/api/pizzas")
+                    .then(res => res.json())
+                    .then(pizzas => {
+                        pizzaSelect.innerHTML = ""; // clear loading text
+                        pizzas.forEach(p => {
+                            const opt = document.createElement("option");
+                            opt.value = p.modifier_name;
+                            opt.textContent = p.modifier_name;
+                            pizzaSelect.appendChild(opt);
+                        });
+                    })
+                    .catch(err => {
+                        console.error("Erreur chargement pizzas", err);
+                        pizzaSelect.innerHTML = "<option value='Pepperoni'>Pepperoni</option><option value='Fromage'>Fromage</option>";
+                    });
+            }
+        });
+    </script>
 </body>
 </html>

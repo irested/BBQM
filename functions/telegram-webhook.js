@@ -97,14 +97,24 @@ export async function onRequestPost(context) {
           size_id: sizeId
         });
         
-        // 4. Ajouter l'option Pizza (62 = Pepperoni, 63 = Fromage)
-        let modifierId = 62; // par défaut
-        if (pizza && pizza.toLowerCase().includes("fromage")) modifierId = 63;
+        // 4. Ajouter l'option Pizza (Recherche dynamique de l'ID par nom)
+        let modifierId = null;
+        try {
+          const modifiers = await hFetch('/products/modifiers/');
+          // On cherche une pizza dont le nom contient ou correspond à ce qu'on a reçu
+          const found = modifiers.find(m => m.modifier_name && m.modifier_name.toLowerCase().includes(pizza.toLowerCase().substring(0, 5)));
+          if (found) modifierId = found.modifier_id || found.id;
+        } catch (e) {
+          console.error("Erreur recherche modifier_id:", e);
+        }
+        
+        // Fallback si non trouvé
+        if (!modifierId) modifierId = 62;
         
         // L'API Hiboutik retourne souvent la liste des lignes, on prend la dernière ajoutée
         let lineId = Array.isArray(addedProduct) ? addedProduct[addedProduct.length - 1].id : addedProduct.id;
         
-        if (lineId) {
+        if (lineId && modifierId) {
           await hFetch(`/sales/add_modifier/`, 'POST', {
             sale_id: saleId,
             line_id: lineId,
