@@ -353,7 +353,7 @@
             const data = Object.fromEntries(formData.entries());
 
             try {
-                const response = await fetch('/functions/order', {
+                const response = await fetch('/order', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
