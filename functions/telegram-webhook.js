@@ -65,7 +65,10 @@ export async function onRequestPost(context) {
         };
         if (body) options.body = JSON.stringify(body);
         const res = await fetch(baseUrl + endpoint, options);
-        if (!res.ok) throw new Error(`Hiboutik API Error: ${res.statusText} on ${endpoint}`);
+        if (!res.ok) {
+            const errText = await res.text();
+            throw new Error(`Erreur ${res.status} sur ${endpoint} : ${errText}`);
+        }
         return await res.json();
       }
 
@@ -140,7 +143,7 @@ export async function onRequestPost(context) {
         }
       } catch (err) {
         console.error("Erreur durant l'intégration Hiboutik:", err);
-        // Informer Telegram de l'erreur
+        // Informer Telegram de l'erreur avec les détails
         await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/answerCallbackQuery`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -151,13 +154,14 @@ export async function onRequestPost(context) {
           })
         });
 
+        const errMsg = err.message || "Erreur inconnue";
         await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/editMessageText`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             chat_id: chatId,
             message_id: messageId,
-            text: originalText + "\n\n❌ *Erreur lors de l'envoi à la caisse. Vérifiez manuellement.*",
+            text: originalText + `\n\n❌ *Erreur lors de l'envoi à la caisse.*\n\`${errMsg}\``,
             parse_mode: "Markdown"
           })
         });
