@@ -142,6 +142,32 @@ export async function onRequestPost(context) {
             modifier_id: modifierId
           });
         }
+
+        // 3. Répondre à Telegram pour dire que c'est validé
+        await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/answerCallbackQuery`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            callback_query_id: callbackQuery.id,
+            text: "✅ Commande validée sur Hiboutik !",
+            show_alert: true
+          })
+        });
+
+        // 4. Mettre à jour le message Telegram pour supprimer le bouton
+        const debugInfo = `\nDebug: LineId=${lineId} ModId=${modifierId}\nAdded: ${JSON.stringify(addedProduct).substring(0, 50)}`;
+        const updatedText = originalText + "\n\n✅ *Traitée et envoyée à la caisse !*" + debugInfo;
+        await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/editMessageText`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: chatId,
+            message_id: messageId,
+            text: updatedText,
+            parse_mode: "Markdown"
+          })
+        });
+
       } catch (err) {
         console.error("Erreur durant l'intégration Hiboutik:", err);
         // Informer Telegram de l'erreur avec les détails
@@ -169,34 +195,6 @@ export async function onRequestPost(context) {
         
         return new Response("OK", { status: 200 });
       }
-      // --- END HIBOUTIK API LOGIC ---
-
-      // 3. Répondre à Telegram pour dire que c'est validé
-      await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/answerCallbackQuery`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          callback_query_id: callbackQuery.id,
-          text: "✅ Commande validée sur Hiboutik !",
-          show_alert: true
-        })
-      });
-
-      // 4. Mettre à jour le message Telegram pour supprimer le bouton
-      const debugInfo = `\nDebug LineId: ${lineId} | ModId: ${modifierId}\nAddedProduct: ${JSON.stringify(addedProduct).substring(0, 50)}`;
-      const updatedText = originalText + "\n\n✅ *Traitée et envoyée à la caisse !*" + debugInfo;
-      await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/editMessageText`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: chatId,
-          message_id: messageId,
-          text: updatedText,
-          parse_mode: "Markdown"
-        })
-      });
-
-      return new Response("OK", { status: 200 });
     }
 
     return new Response("OK", { status: 200 });
