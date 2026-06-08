@@ -75,7 +75,7 @@ export async function onRequestPost(context) {
       try {
         // 1. Chercher ou créer le client
         let customerId;
-        const searchCustomer = await hFetch(`/customers/search/?p=${encodeURIComponent(phone)}`);
+        const searchCustomer = await hFetch(`/customers/search/?phone=${encodeURIComponent(phone)}`);
         if (searchCustomer && searchCustomer.length > 0) {
           customerId = searchCustomer[0].customers_id;
         } else {
