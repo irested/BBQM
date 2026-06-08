@@ -73,19 +73,42 @@
                     </div>
                 </div>
                 
-                <div class="form-group">
-                    <label for="name">Nom Complet</label>
-                    <input type="text" id="name" name="name" required placeholder="Ex: Jean Dupont">
+                <div class="form-group row" style="margin-bottom: 1.5rem;">
+                    <div class="half-width">
+                        <label for="first_name">Prénom</label>
+                        <input type="text" id="first_name" name="first_name" required placeholder="Ex: Jean">
+                    </div>
+                    <div class="half-width">
+                        <label for="last_name">Nom</label>
+                        <input type="text" id="last_name" name="last_name" required placeholder="Ex: Dupont">
+                    </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="phone">Téléphone</label>
-                    <input type="tel" id="phone" name="phone" required placeholder="Ex: 06 12 34 56 78">
+                    <input type="tel" id="phone" name="phone" required pattern="^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$" placeholder="Ex: 06 12 34 56 78" title="Veuillez entrer un numéro de téléphone français valide (ex: 0612345678)">
                 </div>
 
                 <div class="form-group">
-                    <label for="address">Adresse de Livraison</label>
-                    <textarea id="address" name="address" required placeholder="Rue, Code Postal, Ville"></textarea>
+                    <label>Adresse de Livraison</label>
+                    <div class="form-group row" style="margin-bottom: 1.5rem;">
+                        <div class="half-width" style="flex: 0 0 30%;">
+                            <input type="text" id="address_num" name="address_num" required placeholder="N°">
+                        </div>
+                        <div class="half-width" style="flex: 0 0 65%;">
+                            <input type="text" id="address_street" name="address_street" required placeholder="Nom de la rue">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="half-width" style="flex: 0 0 30%;">
+                            <input type="text" id="address_zip" name="address_zip" required pattern="[0-9]{5}" maxlength="5" placeholder="CP">
+                        </div>
+                        <div class="half-width" style="flex: 0 0 65%;">
+                            <select id="address_city" name="address_city" required class="glass-select">
+                                <option value="">Ville</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -508,8 +531,77 @@
     {% endset %}
     <script>{{ js | jsmin | safe }}</script>
     <script>
+        // --- CUSTOM SELECT LOGIC ---
+        function updateCustomSelect(selectEl) {
+            selectEl.style.display = 'none'; // hide original select
+
+            let wrapper = selectEl.nextElementSibling;
+            if (!wrapper || !wrapper.classList.contains('custom-select-wrapper')) {
+                wrapper = document.createElement('div');
+                wrapper.className = 'custom-select-wrapper';
+                selectEl.parentNode.insertBefore(wrapper, selectEl.nextSibling);
+            }
+
+            // clear wrapper content
+            wrapper.innerHTML = '';
+
+            const trigger = document.createElement('div');
+            trigger.className = 'custom-select-trigger';
+            const selectedOpt = selectEl.options[selectEl.selectedIndex] || selectEl.options[0];
+            trigger.textContent = selectedOpt ? selectedOpt.textContent : '';
+            wrapper.appendChild(trigger);
+
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = 'custom-options';
+            
+            Array.from(selectEl.options).forEach((opt, index) => {
+                const customOpt = document.createElement('div');
+                customOpt.className = 'custom-option';
+                if (opt.selected) customOpt.classList.add('selected');
+                customOpt.textContent = opt.textContent;
+                
+                customOpt.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    selectEl.selectedIndex = index;
+                    trigger.textContent = opt.textContent;
+                    
+                    // Trigger change event on original select (if needed)
+                    selectEl.dispatchEvent(new Event('change'));
+
+                    // Remove selected class from others
+                    wrapper.querySelectorAll('.custom-option').forEach(el => el.classList.remove('selected'));
+                    customOpt.classList.add('selected');
+                    
+                    wrapper.classList.remove('open');
+                });
+                
+                optionsContainer.appendChild(customOpt);
+            });
+
+            wrapper.appendChild(optionsContainer);
+
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // Close all other selects first
+                document.querySelectorAll('.custom-select-wrapper').forEach(w => {
+                    if (w !== wrapper) w.classList.remove('open');
+                });
+                wrapper.classList.toggle('open');
+            });
+        }
+
+        // Close dropdowns on outside click
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
+        });
+        // ---------------------------
+
         // Fetch dynamic pizzas from Hiboutik
         document.addEventListener("DOMContentLoaded", () => {
+            
+            // Initialize static selects
+            document.querySelectorAll('select.glass-select').forEach(sel => updateCustomSelect(sel));
+
             const pizzaSelect = document.getElementById("box_pizza");
             if(pizzaSelect) {
                 fetch("/api/pizzas")
@@ -522,11 +614,50 @@
                             opt.textContent = p.modifier_name;
                             pizzaSelect.appendChild(opt);
                         });
+                        updateCustomSelect(pizzaSelect);
                     })
                     .catch(err => {
                         console.error("Erreur chargement pizzas", err);
                         pizzaSelect.innerHTML = "<option value='Pepperoni'>Pepperoni</option><option value='Fromage'>Fromage</option>";
+                        updateCustomSelect(pizzaSelect);
                     });
+            }
+
+            // Autocomplete Ville (API Gouv)
+            const zipInput = document.getElementById("address_zip");
+            const citySelect = document.getElementById("address_city");
+            
+            if (zipInput && citySelect) {
+                zipInput.addEventListener("input", (e) => {
+                    const zip = e.target.value;
+                    if (zip.length === 5) {
+                        citySelect.innerHTML = "<option value=''>Chargement...</option>";
+                        updateCustomSelect(citySelect);
+                        fetch(`https://geo.api.gouv.fr/communes?codePostal=${zip}`)
+                            .then(res => res.json())
+                            .then(cities => {
+                                citySelect.innerHTML = "";
+                                if (cities.length === 0) {
+                                    citySelect.innerHTML = "<option value=''>Ville introuvable</option>";
+                                } else {
+                                    cities.forEach(c => {
+                                        const opt = document.createElement("option");
+                                        opt.value = c.nom;
+                                        opt.textContent = c.nom;
+                                        citySelect.appendChild(opt);
+                                    });
+                                }
+                                updateCustomSelect(citySelect);
+                            })
+                            .catch(() => {
+                                citySelect.innerHTML = "<option value=''>Erreur</option>";
+                                updateCustomSelect(citySelect);
+                            });
+                    } else {
+                        citySelect.innerHTML = "<option value=''>Ville</option>";
+                        updateCustomSelect(citySelect);
+                    }
+                });
             }
         });
     </script>

@@ -9,10 +9,10 @@ export async function onRequestPost(context) {
     return new Response("Invalid JSON", { status: 400 });
   }
 
-  const { name, phone, address, box_size, box_pizza, match_date } = data;
+  const { first_name, last_name, phone, address_num, address_street, address_zip, address_city, box_size, box_pizza, match_date } = data;
 
   // 2. Validate essential fields
-  if (!name || !phone || !address || !box_size || !box_pizza) {
+  if (!first_name || !last_name || !phone || !address_num || !address_street || !address_zip || !address_city || !box_size || !box_pizza) {
     return new Response("Missing fields", { status: 400 });
   }
 
@@ -32,12 +32,15 @@ export async function onRequestPost(context) {
 
   const messageText = `
 🍕 *Nouvelle Pré\\-commande \\!*
-👤 *Client:* ${escapeMD(name)}
+👤 *Prénom:* ${escapeMD(first_name)}
+👤 *Nom:* ${escapeMD(last_name)}
 📞 *Téléphone:* ${escapeMD(phone)}
 📦 *Formule:* Match Box \\(${escapeMD(box_size)}\\)
 🍕 *Pizza:* ${escapeMD(box_pizza)}
 🕒 *Date:* ${escapeMD(match_date)}
-📍 *Adresse:* ${escapeMD(address)}
+📍 *Adresse:* ${escapeMD(address_num)} ${escapeMD(address_street)}
+📍 *CP:* ${escapeMD(address_zip)}
+📍 *Ville:* ${escapeMD(address_city)}
 `;
 
   const telegramPayload = {

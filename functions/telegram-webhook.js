@@ -29,10 +29,15 @@ export async function onRequestPost(context) {
         return match ? match[1].trim() : null;
       };
 
-      const name = extractField("Client");
+      const firstName = extractField("Prénom");
+      const lastName = extractField("Nom");
       const phone = extractField("Téléphone");
       const box = extractField("Formule"); // ex: "Match Box (2)"
       const pizza = extractField("Pizza");
+      const orderDate = extractField("Date");
+      const address = extractField("Adresse");
+      const zip = extractField("CP");
+      const city = extractField("Ville");
 
       // 2. Préparation pour Hiboutik API
       // Note: Les IDs doivent être configurés dans Cloudflare (Variables d'environnement)
@@ -73,8 +78,12 @@ export async function onRequestPost(context) {
         } else {
           // Créer le client
           const newCustomer = await hFetch('/customers/', 'POST', {
-            customers_last_name: name,
-            customers_phone: phone
+            customers_first_name: firstName || "",
+            customers_last_name: lastName || "Inconnu",
+            customers_phone: phone,
+            customers_address: address || "",
+            customers_zip: zip || "",
+            customers_city: city || ""
           });
           customerId = newCustomer.customers_id || newCustomer.id;
         }
@@ -85,6 +94,14 @@ export async function onRequestPost(context) {
           customer_id: customerId
         });
         const saleId = sale.sale_id || sale.id;
+
+        // Ajouter une note à la vente avec la date prévue et l'adresse complète
+        try {
+          const notes = `Pré-commande pour le : ${orderDate}\nLivraison : ${address}, ${zip} ${city}`;
+          await hFetch(`/sales/${saleId}`, 'PUT', { notes: notes });
+        } catch (e) {
+          console.error("Erreur lors de l'ajout des notes:", e);
+        }
 
         // 3. Ajouter le produit BOX (ID 48) avec la bonne déclinaison
         // On suppose que Size 2 = id 1, Size 4 = id 2 par exemple
