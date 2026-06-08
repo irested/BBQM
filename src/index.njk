@@ -1,0 +1,220 @@
+---
+layout: base.njk
+title: Match Box 313 | Match Night, zéro effort
+---
+<div class="poster-container">
+    {% image "/assets/new_bg.png", "Match Box 313", "(max-width: 2000px) 100vw, 2000px", "poster-img", "eager" %}
+
+
+
+
+
+    
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <span class="hero-badge"><i class="fa-solid fa-futbol"></i> &nbsp;Detroit-style · Soccer Night</span>
+            <h1 class="hero-title">Match Night,<br><span class="highlight">zéro effort</span></h1>
+            <p class="hero-subtitle">Tout est prêt. Tu chauffes. Tu profites.</p>
+            <a href="#products" class="cta-btn">Commander ma Match Box <i class="fa-solid fa-fire"></i></a>
+            <div class="scroll-hint">
+                <span>Découvrir les box</span>
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
+        </div>
+    </header>
+</div>
+
+<!-- Product Section — in normal flow, pulled up over the poster bottom with negative margin -->
+<section id="products" class="products">
+    <div class="container">
+        <div class="section-header reveal-item">
+            <h2 class="section-title">Nos Box best-sellers <i class="fa-solid fa-pizza-slice nav-icon" style="color:var(--primary-accent)"></i></h2>
+            <p class="section-subtitle">Conçues pour le match. Livrées prêtes à chauffer.</p>
+            
+            <!-- In-section Countdown -->
+            <div id="countdown-ticker" class="section-countdown" style="display: none;">
+                <span class="ticker-label">⏳ Fermeture des commandes pour <span id="next-match-name">...</span> dans :</span>
+                <div class="ticker-clock">
+                    <span id="days">00</span>j <span id="hours">00</span>h <span id="minutes">00</span>m <span id="seconds">00</span>s
+                </div>
+            </div>
+        </div>
+        <div class="product-grid">
+            {% for box in boxes %}
+            <div class="product-card reveal-item">
+                <div class="card-img-wrap">
+                    {% image box.image, box.title, "(max-width: 768px) 100vw, 33vw", "card-img" %}
+                    <span class="price-tag">{{ box.price }}</span>
+                </div>
+
+
+
+                <div class="card-info">
+                    <h3>{{ box.title }}</h3>
+                    <p>{{ box.description }}</p>
+                    <button class="card-btn">Commander</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- How it works -->
+<section id="how" class="how-it-works">
+    <div class="container">
+        <div class="section-header reveal-item">
+            <h2 class="section-title">Comment ça marche ?</h2>
+            <p class="section-subtitle">Simple, rapide, délicieux.</p>
+        </div>
+        <div class="steps-grid">
+            <!-- Continuous vertical progress line (mobile only) -->
+            <div class="steps-progress-v">
+                <div class="steps-progress-fill"></div>
+            </div>
+            
+            <div class="step-card reveal-item">
+                <p class="step-number">01</p>
+                <div class="step-icon">
+                    <i class="fa-solid fa-mobile-screen"></i>
+                </div>
+                <h4>Commandez ta Box</h4>
+                <p>Choisis ta box préférée et reçois-la rapidement chez toi, prête à être chauffée.</p>
+            </div>
+            <div class="step-card reveal-item">
+                <p class="step-number">02</p>
+                <div class="step-icon">
+                    <i class="fa-solid fa-fire-burner"></i>
+                </div>
+                <h4>Chauffez sans stress</h4>
+                <p>Quelques minutes au four — et ta pizza Detroit-style croustille à la perfection.</p>
+            </div>
+            <div class="step-card reveal-item">
+                <p class="step-number">03</p>
+                <div class="step-icon">
+                    <i class="fa-regular fa-face-laugh-squint"></i>
+                </div>
+                <h4>Savourez le match</h4>
+                <p>Installe-toi, share avec tes amis et profite pleinement de chaque minute de jeu !</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Social Proof Section -->
+<section id="reviews" class="reviews-section">
+    <div class="container">
+        <div class="reviews-grid">
+            <!-- Global Rating Card -->
+            <div class="rating-card reveal-item">
+                <div class="rating-header">
+                    <span class="rating-number">4.8</span>
+                    <span class="rating-max">/5</span>
+                </div>
+                <div class="stars">
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star-half-stroke"></i>
+                </div>
+                <p class="rating-source">Moyenne des avis Food Truck</p>
+                <div class="trust-badge">
+                    <i class="fa-brands fa-google"></i> Verified Reviews
+                </div>
+            </div>
+
+            <!-- Featured Testimonial -->
+            <div class="review-main reveal-item">
+                <i class="fa-solid fa-quote-left quote-icon"></i>
+                <p class="review-text">
+                    "Accueil chaleureux, agréable et souriant, rien à redire. Les pizzas sont excellentes et bien fournies. Jamais déçu, hâte d'être à la journée pizza car on se régale à chaque commande. Je recommande à 1000% !"
+                </p>
+                <div class="review-author">— Client Fidèle (Google Review)</div>
+            </div>
+
+            <!-- Chef's Note -->
+            <div class="chef-note-card reveal-item">
+                <div class="chef-avatar">
+                    <i class="fa-solid fa-fire"></i>
+                </div>
+                <h4>Le mot du Chef</h4>
+                <p>
+                    "Dans mes Match Box, la pizza Detroit n'est que le début. Tout tourne autour de la qualité : mes <strong>viandes fumées maison</strong> et mes <strong>entrées artisanales</strong> sont au cœur de l'expérience. C'est cette même exigence que vous retrouvez chaque jour à mon Food Truck."
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Menu Gallery -->
+<section id="menu-gallery" class="gallery-section">
+    <div class="container">
+        <div class="section-header reveal-item">
+            <h2 class="section-title">L'Ardoise du Chef <i class="fa-solid fa-camera nav-icon" style="color:var(--primary-accent)"></i></h2>
+            <p class="section-subtitle">Focus sur nos pépites fumées et croustillantes.</p>
+        </div>
+        
+        <div class="gallery-grid">
+            {% for item in gallery %}
+            <div class="gallery-card reveal-item {{ 'tall' if loop.index == 2 or loop.index == 5 }} {{ 'wide' if loop.index == 1 }}">
+                <div class="gallery-img-container">
+                    {% image item.image, item.title, "(max-width: 1200px) 50vw, 33vw", "gallery-img" %}
+                    <div class="gallery-overlay">
+
+
+
+                        <div class="gallery-info">
+                            <h4>{{ item.title }}</h4>
+                            <p>{{ item.description }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Social Hub (Find Us) -->
+<section id="community" class="social-section">
+    <div class="container">
+        <div class="section-header reveal-item">
+            <h2 class="section-title">Rejoignez la team 313 <i class="fa-solid fa-users nav-icon" style="color:var(--primary-accent)"></i></h2>
+            <p class="section-subtitle">Suivez nos aventures et partagez vos Match Box.</p>
+        </div>
+
+        <div class="social-grid">
+            <!-- Facebook -->
+            <a href="https://www.facebook.com/313pizza.fr/" target="_blank" class="social-card fb reveal-item">
+                <div class="social-icon"><i class="fa-brands fa-facebook"></i></div>
+                <div class="social-content">
+                    <h4>Facebook</h4>
+                    <p>Actu, évènements et photos de la communauté.</p>
+                </div>
+                <div class="social-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+            </a>
+
+            <!-- Instagram -->
+            <a href="https://www.instagram.com/313pizza.fr/" target="_blank" class="social-card ig reveal-item">
+                <div class="social-icon"><i class="fa-brands fa-instagram"></i></div>
+                <div class="social-content">
+                    <h4>Instagram</h4>
+                    <p>Le plein de foodporn avant le coup d'envoi.</p>
+                </div>
+                <div class="social-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+            </a>
+
+            <!-- Discord (Internal Link or Placeholder) -->
+            <div class="social-card discord reveal-item">
+                <div class="social-icon"><i class="fa-brands fa-discord"></i></div>
+                <div class="social-content">
+                    <h4>Discord</h4>
+                    <p>Le salon privé arrive bientôt pour le Mondial !</p>
+                </div>
+                <span class="social-badge">À venir</span>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,23 @@
+[
+    {
+        "id": "match1",
+        "label": "France vs Sénégal (16/06)",
+        "value": "France-Senegal (21h)",
+        "matchDate": "2026-06-16T21:00:00",
+        "deadlineDate": "2026-06-13T00:00:00"
+    },
+    {
+        "id": "match2",
+        "label": "France vs Irak (22/06)",
+        "value": "France-Irak (23h)",
+        "matchDate": "2026-06-22T23:00:00",
+        "deadlineDate": "2026-06-19T00:00:00"
+    },
+    {
+        "id": "match3",
+        "label": "Norvège vs France (26/06)",
+        "value": "Norvege-France (21h)",
+        "matchDate": "2026-06-26T21:00:00",
+        "deadlineDate": "2026-06-23T00:00:00"
+    }
+]

@@ -1,0 +1,1717 @@
+:root {
+    --bg-dark: #0c0806;
+    --bg-card: rgba(18, 12, 8, 0.75);
+    --text-main: #ffffff;
+    --text-muted: #c9d1d9;
+    --primary-accent: #f97316;
+    --primary-hover: #ea580c;
+    --font-main: 'Outfit', sans-serif;
+    --nav-bg: rgba(12, 8, 6, 0.75);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --orange-glow: rgba(249, 115, 22, 0.5);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* ============================================================
+   NAVBAR
+============================================================ */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 3rem;
+    background: var(--nav-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 5000;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    transition: background 0.3s;
+}
+
+/* logo badge style */
+.logo {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--primary-accent);
+    letter-spacing: -1px;
+    border: 2px solid var(--primary-accent);
+    padding: 0.2rem 0.7rem;
+    border-radius: 6px;
+    box-shadow: 0 0 14px rgba(249, 115, 22, 0.25);
+    transition: box-shadow 0.3s;
+}
+
+.logo:hover {
+    box-shadow: 0 0 22px var(--orange-glow);
+}
+
+.nav-center {
+    display: flex;
+    gap: 2.5rem;
+}
+
+.nav-link {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: color 0.3s, text-shadow 0.3s;
+    position: relative;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary-accent);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--text-main);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.order-btn {
+    background: var(--primary-accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 0.6rem 1.4rem;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 15px var(--orange-glow);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.order-btn:hover {
+    transform: translateY(-2px);
+    background: var(--primary-hover);
+    box-shadow: 0 8px 25px var(--orange-glow);
+}
+
+.menu-btn {
+    background: none;
+    border: none;
+    color: var(--text-main);
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: none;
+}
+
+/* ============================================================
+   POSTER CONTAINER — image shows at FULL natural dimensions
+   (width 100%, height auto) so the pizza/food at the bottom
+   is always visible. Hero text is absolutely placed over the
+   top ~60% where the characters and TV are.
+============================================================ */
+.poster-container {
+    position: relative;
+    width: 100%;
+}
+
+/* Gradual fade at the bottom to transition into the background color */
+.poster-container::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 15%;
+    /* Subtle transition */
+    background: linear-gradient(to top, var(--bg-dark), transparent);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.poster-img {
+    width: 100%;
+    height: auto;
+    /* natural aspect ratio, shows full scene */
+    display: block;
+    z-index: 0;
+}
+
+/* --- HERO TEXT --- */
+/* Absolute over the top portion (characters + TV area) */
+.hero {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    /* covers upper character zone, not the food */
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: calc(var(--nav-height, 80px) + 2rem) 2rem 2rem;
+}
+
+.hero-content {
+    max-width: 900px;
+    animation: fadeInUp 1s ease forwards;
+}
+
+/* Badge label above main title */
+.hero-badge {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--primary-accent);
+    background: rgba(249, 115, 22, 0.12);
+    border: 1px solid rgba(249, 115, 22, 0.3);
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(6px);
+}
+
+.hero-title {
+    font-size: 6.5rem;
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 4px 30px rgba(0, 0, 0, 0.95), 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.hero-title .highlight {
+    color: var(--primary-accent);
+}
+
+.hero-subtitle {
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 2rem;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+}
+
+/* ============================================================
+   IN-SECTION COUNTDOWN (PRODUCTS)
+============================================================ */
+.section-countdown {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+    padding: 1.2rem 2.5rem;
+    background: rgba(255, 255, 255, 0.03); 
+    border: 1px solid rgba(249, 115, 22, 0.3);
+    border-radius: 24px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), 0 0 20px rgba(249, 115, 22, 0.1);
+}
+
+.ticker-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--primary-accent);
+}
+
+.ticker-clock {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 2px;
+}
+
+.ticker-clock span {
+    color: var(--primary-accent);
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.6), 0 0 12px rgba(249, 115, 22, 0.2);
+}
+
+.navbar {
+    top: 0;
+}
+
+.cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: var(--primary-accent);
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 1.1rem 2.8rem;
+    border-radius: 50px;
+    box-shadow: 0 12px 30px var(--orange-glow);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-family: inherit;
+}
+
+.cta-btn:hover {
+    transform: translateY(-4px) scale(1.03);
+    background: var(--primary-hover);
+    box-shadow: 0 20px 40px var(--orange-glow);
+}
+
+/* Scroll-down cue */
+.scroll-hint {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    animation: bounce 2s infinite;
+}
+
+.scroll-hint i {
+    font-size: 1.1rem;
+}
+
+/* --- PRODUCT SECTION --- */
+/* Comes right after the poster in normal flow — NO overlap */
+.products {
+    position: relative;
+    z-index: 3;
+    padding: 5rem 0 6rem;
+    background: var(--bg-dark);
+    margin-top: 0;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+.section-title {
+    font-size: 3.5rem;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+    margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    font-weight: 400;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+    /* Shadow for better readability over the image */
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+/* Featured product card with layered borders and enhanced glass */
+.product-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: 28px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    /* outer border */
+    box-shadow:
+        0 24px 48px rgba(0, 0, 0, 0.6),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    /* inner highlight */
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.6s ease,
+        border-color 0.3s;
+}
+
+/* Internal glow on hover */
+.product-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(800px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(255, 255, 255, 0.04), transparent 40%);
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+.product-card:hover::before {
+    opacity: 1;
+}
+
+.product-card:hover {
+    transform: translateY(-16px) scale(1.02);
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
+    border-color: rgba(249, 115, 22, 0.4);
+}
+
+.card-img-wrap {
+    position: relative;
+    width: 100%;
+    padding-top: 70%;
+    overflow: hidden;
+}
+
+.card-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.product-card:hover .card-img {
+    transform: scale(1.08);
+}
+
+/* gradient over image bottom for readability */
+.card-img-wrap::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to top, rgba(18, 12, 8, 0.9), transparent);
+    z-index: 1;
+}
+
+.price-tag {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--primary-accent);
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.05rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 50px;
+    z-index: 2;
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.5);
+}
+
+.card-info {
+    padding: 1.5rem 2rem 2rem;
+}
+
+.card-info h3 {
+    font-size: 1.6rem;
+    margin-bottom: 0.6rem;
+}
+
+.card-info p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+    min-height: 2.9em;
+}
+
+.card-btn {
+    width: 100%;
+    background: transparent;
+    color: var(--text-main);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 0.9rem 1rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    letter-spacing: 0.02em;
+}
+
+.card-btn:hover {
+    background: var(--primary-accent);
+    border-color: var(--primary-accent);
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(249, 115, 22, 0.4);
+}
+
+/* ============================================================
+   HOW IT WORKS
+============================================================ */
+.how-it-works {
+    padding: 7rem 0 8rem;
+    background: var(--bg-dark);
+    position: relative;
+}
+
+/* subtle orange top border accent */
+.how-it-works::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: var(--primary-accent);
+    border-radius: 2px;
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    text-align: center;
+    position: relative;
+}
+
+/* connecting dashed line between steps (Desktop) */
+.steps-grid::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: calc(50% / 3);
+    right: calc(50% / 3);
+    height: 1px;
+    border-top: 2px dashed rgba(249, 115, 22, 0.25);
+    z-index: 0;
+}
+
+/* Vertical Progress Line (Mobile) */
+.steps-progress-v {
+    display: none;
+    /* Hidden on desktop */
+}
+
+@media (max-width: 768px) {
+    .steps-progress-v {
+        display: block;
+        position: absolute;
+        top: 0;
+        /* JS will position this vertically */
+        left: 50%;
+        width: 2px;
+        background: rgba(249, 115, 22, 0.05);
+        transform: translateX(-50%);
+        z-index: 1;
+        /* Behind icons */
+    }
+
+    .steps-progress-fill {
+        width: 100%;
+        height: 0;
+        background-image: linear-gradient(to bottom,
+                var(--primary-accent) 60%,
+                transparent 40%);
+        background-size: 100% 15px;
+        box-shadow: 0 0 10px var(--orange-glow);
+        transition: height 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+}
+
+.step-card {
+    padding: 2rem 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.step-number {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    color: var(--primary-accent);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.step-icon {
+    width: 76px;
+    height: 76px;
+    margin: 0 auto 1.5rem;
+    background: #0c0806;
+    border: 1px solid rgba(249, 115, 22, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: rgba(255, 255, 255, 0.2);
+    /* Semi-transparent color for content only */
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    z-index: 10;
+    /* Definitely above the progress line */
+    transform: scale(0.9);
+}
+
+.step-icon.is-active {
+    background: #0c0806;
+    border-color: var(--primary-accent);
+    box-shadow: 0 0 25px var(--orange-glow), inset 0 0 10px var(--orange-glow);
+    color: var(--primary-accent);
+    transform: scale(1);
+}
+
+.step-card:hover .step-icon {
+    background: rgba(249, 115, 22, 0.18);
+    transform: scale(1.1);
+}
+
+.step-card h4 {
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+}
+
+.step-card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+/* ============================================================
+   SOCIAL HUB
+============================================================ */
+.social-section {
+    padding: 8rem 0;
+    background: #070403;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.social-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.social-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 28px;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.social-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-muted);
+    transition: transform 0.4s ease, color 0.4s ease;
+}
+
+.social-content h4 {
+    font-size: 1.4rem;
+    margin-bottom: 0.6rem;
+    color: #fff;
+}
+
+.social-content p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.social-arrow {
+    margin-top: 1.5rem;
+    color: var(--primary-accent);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s ease;
+}
+
+.social-badge {
+    margin-top: 1.5rem;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    text-transform: uppercase;
+}
+
+/* Hover States */
+.social-card:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.social-card.fb:hover {
+    box-shadow: 0 20px 40px rgba(24, 119, 242, 0.15);
+}
+
+.social-card.fb:hover .social-icon {
+    color: #1877f2;
+    transform: scale(1.1);
+}
+
+.social-card.ig:hover {
+    box-shadow: 0 20px 40px rgba(225, 48, 108, 0.15);
+}
+
+.social-card.ig:hover .social-icon {
+    color: #e1306c;
+    transform: scale(1.1);
+}
+
+.social-card:hover .social-arrow {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 900px) {
+    .social-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .social-card {
+        padding: 2rem;
+        flex-direction: row;
+        text-align: left;
+        gap: 1.5rem;
+    }
+
+    .social-icon {
+        margin-bottom: 0;
+        font-size: 2rem;
+    }
+
+    .social-arrow {
+        margin-top: 0;
+        margin-left: auto;
+        opacity: 1;
+        transform: none;
+    }
+
+    .social-badge {
+        margin-top: 0;
+        margin-left: auto;
+    }
+}
+
+/* ============================================================
+   MENU GALLERY (BENTO GRID)
+============================================================ */
+.gallery-section {
+    padding: 8rem 0;
+    background: #0c0806;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-auto-rows: 250px;
+    gap: 1.5rem;
+}
+
+.gallery-card {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    background: #1a1512;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Bento Sizing */
+.gallery-card.wide {
+    grid-column: span 2;
+}
+
+.gallery-card.tall {
+    grid-row: span 2;
+}
+
+@media (max-width: 768px) {
+
+    .gallery-card.wide,
+    .gallery-card.tall {
+        grid-column: unset;
+        grid-row: unset;
+    }
+
+    .gallery-grid {
+        grid-auto-rows: 300px;
+    }
+}
+
+.gallery-img-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.gallery-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.gallery-card:hover .gallery-img {
+    transform: scale(1.1);
+}
+
+.gallery-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 60%);
+    display: flex;
+    align-items: flex-end;
+    padding: 2rem;
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    transition: all 0.4s ease;
+}
+
+.gallery-card:hover .gallery-overlay {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+}
+
+.gallery-info h4 {
+    font-size: 1.5rem;
+    margin-bottom: 0.3rem;
+    color: #fff;
+    transform: translateY(20px);
+    transition: transform 0.4s ease;
+}
+
+.gallery-info p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    transform: translateY(20px);
+    transition: transform 0.4s ease 0.1s;
+}
+
+.gallery-card:hover .gallery-info h4,
+.gallery-card:hover .gallery-info p {
+    transform: translateY(0);
+}
+
+/* ============================================================
+   MODAL & FORMS
+============================================================ */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: none;
+    /* Physically remove from click-tree when inactive */
+    align-items: center;
+    /* Center on desktop */
+    justify-content: center;
+    z-index: 6000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    padding: 1.5rem;
+    overflow-y: auto;
+    /* Enable vertical scroll if content is tall */
+    -webkit-overflow-scrolling: touch;
+}
+
+.modal.active {
+    display: flex;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+@media (max-width: 480px) {
+    .modal {
+        align-items: flex-start;
+        /* Start at top for scrolling on mobile */
+        padding: 1rem;
+    }
+}
+
+.modal-content {
+    background: rgba(18, 12, 8, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 32px;
+    width: 100%;
+    max-width: 500px;
+    padding: 3rem;
+    position: relative;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+    pointer-events: auto;
+    /* Explicitly catch touches */
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 2.5rem 1.5rem 2rem;
+        border-radius: 24px;
+        margin-top: 2rem;
+        /* Give space at top */
+        margin-bottom: 2rem;
+        /* Give space at bottom for scrolling */
+    }
+}
+
+.close-modal {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 2rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-modal:hover {
+    color: var(--text-main);
+}
+
+.modal-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.modal-header h2 {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.modal-header p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+/* Selection Summary Badge */
+.selection-summary {
+    background: rgba(249, 115, 22, 0.1);
+    border: 1px solid rgba(249, 115, 22, 0.2);
+    border-radius: 12px;
+    padding: 0.8rem 1.2rem;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.selection-summary .label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--primary-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.selection-box-name {
+    font-weight: 800;
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.6rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 0.9rem 1.1rem;
+    color: #fff;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.form-group select option {
+    background: #1a1512;
+    color: #fff;
+}
+
+/* Custom Segmented Match Selector */
+.match-selector {
+    display: flex;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 0.3rem;
+    gap: 0.3rem;
+}
+
+.match-selector input {
+    display: none;
+}
+
+.match-selector label {
+    flex: 1;
+    text-align: center;
+    padding: 0.7rem;
+    margin-bottom: 0 !important;
+    border-radius: 9px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.3s;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.match-selector input:checked+label {
+    background: var(--primary-accent);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+}
+
+.match-selector input:disabled+label {
+    opacity: 0.3;
+    pointer-events: none;
+    filter: grayscale(1);
+    cursor: not-allowed;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.match-selector label:hover:not(.match-selector input:checked + label, .match-selector input:disabled + label) {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-main);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.07);
+    border-color: var(--primary-accent);
+    box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.15);
+}
+
+.form-group textarea {
+    height: 80px;
+    resize: none;
+}
+
+.submit-btn {
+    width: 100%;
+    background: var(--primary-accent);
+    color: #fff;
+    border: none;
+    padding: 1.1rem;
+    border-radius: 14px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 1rem;
+}
+
+.submit-btn:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px var(--orange-glow);
+}
+
+.form-status {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.form-status.success {
+    color: #10b981;
+}
+
+.form-status.error {
+    color: #ef4444;
+}
+
+.form-status.processing {
+    color: var(--text-muted);
+}
+
+/* connecting dashed line between steps */
+/* ============================================================
+   REVEAL SYSTEM
+============================================================ */
+.reveal-item {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.2, 0, 0, 1),
+        transform 0.8s cubic-bezier(0.2, 0, 0, 1);
+    will-change: transform, opacity;
+    pointer-events: none;
+    /* Prevent invisible blocks before reveal */
+}
+
+.reveal-item.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    /* Enable interaction once visible */
+}
+
+/* staggered delays for grids */
+.reveal-item:nth-child(2) {
+    transition-delay: 0.1s;
+}
+
+.reveal-item:nth-child(3) {
+    transition-delay: 0.2s;
+}
+
+/* ============================================================
+   ANIMATIONS
+============================================================ */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(10px);
+    }
+}
+
+@keyframes logoGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 14px rgba(249, 115, 22, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 24px rgba(249, 115, 22, 0.5);
+    }
+}
+
+.logo {
+    animation: logoGlow 3s infinite ease-in-out;
+}
+
+/* ============================================================
+   RESPONSIVE
+   Image is landscape (≈16:9). At viewport width W, image height ≈ 0.5625·W.
+   Hero is absolute over top 60% of that → hero height ≈ 0.34·W.
+   Font sizes scale accordingly.
+============================================================ */
+@media (max-width: 1100px) {
+    .hero-title {
+        font-size: 5rem;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .steps-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .steps-grid::before {
+        display: none;
+    }
+}
+
+@media (max-width: 900px) {
+    .hero {
+        padding: 6rem 1.5rem 1.5rem;
+    }
+
+    .hero-title {
+        font-size: 4rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.4rem;
+        margin-bottom: 2rem;
+    }
+
+    .hero-badge {
+        font-size: 0.75rem;
+    }
+
+    .scroll-hint {
+        display: none;
+    }
+
+    /* hides at this size to avoid crowding */
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 1rem 1.5rem;
+    }
+
+    .nav-center {
+        display: none;
+    }
+
+    .menu-btn {
+        display: block;
+    }
+
+    .nav-center.active {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(12, 8, 6, 0.97);
+        padding: 1.5rem 2rem;
+        gap: 1.2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .hero {
+        padding: 5rem 1rem 1rem;
+    }
+
+    .hero-title {
+        font-size: 3.2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .cta-btn {
+        font-size: 1rem;
+        padding: 0.9rem 2rem;
+    }
+
+    .products {
+        padding: 3rem 0 4rem;
+        margin-top: 0;
+    }
+
+    .product-grid {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+        margin: 0 auto;
+    }
+
+    .steps-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .poster-container {
+        min-height: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .poster-img {
+        position: relative;
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        z-index: 1;
+    }
+
+    .hero {
+        position: relative;
+        height: auto;
+        margin-top: -15vh;
+        /* Layered overlap over the image */
+        padding: 2rem 1.5rem 4rem;
+        background: linear-gradient(to bottom, transparent, var(--bg-dark) 40%);
+        z-index: 2;
+    }
+
+    .hero-title {
+        font-size: 2.8rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+
+    .hero-badge {
+        display: none;
+    }
+
+    .products {
+        padding: 1rem 0 3rem;
+        margin-top: 0;
+    }
+
+    .section-title {
+        font-size: 2.1rem;
+    }
+}
+
+/* ============================================================
+   WIDESCREEN MODE  (toggled by JS when aspect ratio > 1.55)
+
+   Strategy: keep the image at FULL natural dimensions so both
+   the characters (top) AND the pizza/food (bottom) are visible.
+   We only:
+     1. Hide the scroll-hint (not needed, products overlap below)
+     2. Pull the products section up slightly into the food zone
+     3. Add a gradient so cards emerge naturally from the image
+============================================================ */
+
+/* Image stays at full natural size — no cropping */
+.is-widescreen .poster-container {
+    overflow: visible;
+    /* don't clip anything */
+}
+
+/* Ensure image is in normal flow at full size */
+.is-widescreen .poster-img {
+    position: static;
+    /* back to normal flow */
+    inset: auto;
+    width: 100%;
+    height: auto;
+    object-fit: unset;
+    min-height: unset;
+}
+
+/* Hero stays as absolute overlay on the top 60% (character zone) */
+/* — no changes needed, base CSS handles it correctly — */
+
+/* Scroll hint is not needed in widescreen — products are visible on scroll */
+.is-widescreen .scroll-hint {
+    display: none;
+}
+
+/* Pull products UP only into the bottom food zone of the image.
+   margin-top is set dynamically by JS (OVERLAP_FRACTION × image height)
+   so it's correct at every resolution: 1080p, 2K, 4K, ultrawide.       */
+.is-widescreen .products {
+    padding-top: 2rem;
+    background: transparent;
+}
+
+
+
+/* ============================================================
+   SOCIAL PROOF (REVIEWS)
+============================================================ */
+.reviews-section {
+    padding: 8rem 0;
+    background: var(--bg-dark);
+    position: relative;
+    overflow: hidden;
+}
+
+.reviews-grid {
+    display: grid;
+    grid-template-columns: 300px 1fr 350px;
+    gap: 3rem;
+    align-items: stretch;
+}
+
+.rating-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 32px;
+    padding: 3rem 2rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+}
+
+.rating-header {
+    margin-bottom: 0.5rem;
+}
+
+.rating-number {
+    font-size: 5rem;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+}
+
+.rating-max {
+    font-size: 1.5rem;
+    color: var(--primary-accent);
+    font-weight: 800;
+}
+
+.stars {
+    color: #fbbf24;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.4));
+}
+
+.rating-source {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+}
+
+.trust-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 0.6rem 1.2rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.trust-badge i {
+    color: #4285F4;
+}
+
+/* Main Testimonial */
+.review-main {
+    position: relative;
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.quote-icon {
+    font-size: 3rem;
+    color: var(--primary-accent);
+    opacity: 0.2;
+    position: absolute;
+    top: 2rem;
+    left: 0;
+}
+
+.review-text {
+    font-size: 1.8rem;
+    font-weight: 300;
+    line-height: 1.4;
+    color: #fff;
+    font-style: italic;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.review-author {
+    font-weight: 700;
+    color: var(--primary-accent);
+    font-size: 1.1rem;
+    letter-spacing: 0.02em;
+}
+
+/* Chef Card */
+.chef-note-card {
+    background: linear-gradient(145deg, rgba(249, 115, 22, 0.1), rgba(18, 12, 8, 0.4));
+    border: 1px solid rgba(249, 115, 22, 0.2);
+    border-radius: 32px;
+    padding: 2.5rem;
+    position: relative;
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+}
+
+.chef-avatar {
+    width: 60px;
+    height: 60px;
+    background: var(--primary-accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 0 20px var(--orange-glow);
+}
+
+.chef-note-card h4 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+.chef-note-card p {
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.chef-note-card strong {
+    color: #fff;
+}
+
+@media (max-width: 1024px) {
+    .reviews-grid {
+        grid-template-columns: 1fr;
+        gap: 4rem;
+    }
+
+    .rating-card {
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .review-main {
+        padding: 2rem 0;
+        text-align: center;
+    }
+
+    .quote-icon {
+        left: 50%;
+        transform: translateX(-50%);
+        top: -1rem;
+    }
+
+    .review-text {
+        font-size: 1.4rem;
+    }
+}
+
+footer {
+    text-align: center;
+    padding: 5rem 0 4rem;
+    background: #070403;
+    color: rgba(255, 255, 255, 0.3);
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    font-size: 0.95rem;
+}
+
+footer span {
+    color: var(--primary-accent);
+    font-weight: 800;
+}
+
+/* ============================================================
+   PERFORMANCE TWEAKS
+============================================================ */
+section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 500px;
+}
+
+#products {
+    content-visibility: visible; /* Ensure visible for initial load if near top */
+}
+
+/* ============================================================
+   FLOATING CONTACT BUTTON
+============================================================ */
+.floating-contact {
+    position: fixed;
+    bottom: 2.5rem;
+    right: 2.5rem;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1.2rem;
+}
+
+.contact-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.floating-contact.active .contact-menu {
+    pointer-events: auto;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    background: rgba(18, 12, 8, 0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 0.9rem 1.6rem;
+    border-radius: 50px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+}
+
+.contact-item:hover {
+    background: rgba(249, 115, 22, 0.15);
+    border-color: var(--primary-accent);
+    transform: translateX(-8px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 20px rgba(249, 115, 22, 0.2);
+}
+
+.contact-item i {
+    font-size: 1.3rem;
+}
+
+.contact-item.call i {
+    color: #22c55e; /* Green for call */
+}
+
+.contact-item.messenger i {
+    color: #0084ff; /* Messenger blue */
+}
+
+.contact-toggle {
+    width: 68px;
+    height: 68px;
+    background: var(--primary-accent);
+    color: #fff;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 10px 40px var(--orange-glow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.contact-toggle:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 20px 60px var(--orange-glow);
+}
+
+.contact-toggle .close-icon {
+    display: none;
+}
+
+.floating-contact.active .contact-toggle {
+    background: #1a1512;
+    transform: rotate(180deg);
+}
+
+.floating-contact.active .contact-toggle .open-icon {
+    display: none;
+}
+
+.floating-contact.active .contact-toggle .close-icon {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .floating-contact {
+        bottom: 1.5rem;
+        right: 1.5rem;
+    }
+    
+    .contact-toggle {
+        width: 60px;
+        height: 60px;
+        font-size: 1.6rem;
+        box-shadow: 0 8px 30px var(--orange-glow);
+    }
+    
+    .contact-item {
+        padding: 0.8rem 1.4rem;
+        font-size: 0.9rem;
+    }
+    
+    .contact-label {
+        display: inline-block; /* Keep labels on mobile too for best UX */
+    }
+}

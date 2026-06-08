@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title | default("Match Box 313") }}</title>
+    <meta name="description" content="Match Box 313: Pzzas Detroit-style, nachos, et tout ce qu'il faut pour une soirée foot réussie. Tu chauffes, tu profites !">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.20/dist/lenis.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <span class="logo">313</span>
+        </div>
+        <div class="nav-center">
+            <a href="#products" class="nav-link">Les Box</a>
+            <a href="#how" class="nav-link">Comment ça marche</a>
+            <a href="#menu-gallery" class="nav-link">L'Ardoise</a>
+            <a href="#community" class="nav-link">Communauté</a>
+        </div>
+        <div class="nav-right">
+            <button class="order-btn" id="open-reserve">Réserver Match Box</button>
+            <button class="menu-btn" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <main>
+        {{ content | safe }}
+    </main>
+
+    <!-- Modal Pre-order -->
+    <div id="order-modal" class="modal">
+        <div class="modal-content reveal-item">
+            <button class="close-modal">&times;</button>
+            <div class="modal-header">
+                <h2>Votre Match Box</h2>
+                <p>Pré-commandez maintenant, payez à la livraison.</p>
+            </div>
+            <form id="order-form">
+                <div class="selection-summary">
+                    <span class="label">Sélection :</span>
+                    <span id="display-box-name" class="selection-box-name">Match Box</span>
+                    <input type="hidden" name="box_name" id="form-box-name" value="Match Box">
+                </div>
+                
+                <div class="form-group">
+                    <label for="name">Nom Complet</label>
+                    <input type="text" id="name" name="name" required placeholder="Ex: Jean Dupont">
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Téléphone</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="Ex: 06 12 34 56 78">
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Adresse de Livraison</label>
+                    <textarea id="address" name="address" required placeholder="Rue, Code Postal, Ville"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Jour du Match</label>
+                    <div class="match-selector">
+                        {% for match in matches %}
+                        <input type="radio" id="{{ match.id }}" name="match_date" value="{{ match.value }}" data-deadline="{{ match.deadlineDate }}" {% if loop.first %}checked{% endif %}>
+                        <label for="{{ match.id }}">{{ match.label }}</label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Confirmer ma pré-commande</button>
+            </form>
+            <div id="form-status" class="form-status"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p><span>313</span> Match Box &nbsp;·&nbsp; Detroit-style pizza pour les soirées foot</p>
+        <p style="margin-top:0.5rem">&copy; 2026 Match Box 313. Tous droits réservés.</p>
+    </footer>
+
+    <!-- Floating Contact Button -->
+    <div class="floating-contact">
+        <div class="contact-menu">
+            <a href="tel:0600000000" class="contact-item call">
+                <i class="fa-solid fa-phone"></i>
+                <span class="contact-label">Appeler</span>
+            </a>
+            <a href="https://m.me/313pizza.fr" target="_blank" class="contact-item messenger">
+                <i class="fa-brands fa-facebook-messenger"></i>
+                <span class="contact-label">Messenger</span>
+            </a>
+        </div>
+        <button class="contact-toggle" aria-label="Contactez-nous">
+            <i class="fa-solid fa-comments open-icon"></i>
+            <i class="fa-solid fa-xmark close-icon"></i>
+        </button>
+    </div>
+
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+
+
+
+    <script>
+        // ── Navigation & Interactions ────────────────────────────
+        const nav        = document.querySelector('.navbar');
+        const menuBtn    = document.querySelector('.menu-btn');
+        const navCenter  = document.querySelector('.nav-center');
+        const posterImg  = document.querySelector('.poster-img');
+        const products   = document.querySelector('.products');
+        const hero       = document.querySelector('.hero');
+        const body       = document.body;
+
+        // Mobile menu toggle
+        menuBtn.addEventListener('click', () => {
+            navCenter.classList.toggle('active');
+        });
+
+        // ── Smart Device & Layout Detection ──────────────────────
+        const WIDE_THRESHOLD = 1.55;
+        const OVERLAP_FRACTION = 0.25;
+
+        function updateLayout() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const ratio = width / height;
+
+            // 1. Precise Mobile detection (Viewport + Touch capabilities)
+            const isTouch = window.matchMedia('(pointer: coarse)').matches;
+            if (width < 768 || (isTouch && width < 1024)) {
+                body.classList.add('is-mobile');
+                body.classList.remove('is-widescreen');
+                products.style.marginTop = '';
+            } else {
+                body.classList.remove('is-mobile');
+                if (ratio > WIDE_THRESHOLD) {
+                    body.classList.add('is-widescreen');
+                    const imgHeight = posterImg.offsetHeight;
+                    if (imgHeight > 0) {
+                        products.style.marginTop = `-${Math.round(imgHeight * OVERLAP_FRACTION)}px`;
+                    }
+                } else {
+                    body.classList.remove('is-widescreen');
+                    products.style.marginTop = '';
+                }
+            }
+
+            // 2. Set dynamic CSS variable for navbar height
+            document.documentElement.style.setProperty('--nav-height', `${nav.offsetHeight}px`);
+        }
+
+        // ── Scroll & Reveal Logic ────────────────────────────────
+        const revealCallback = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-revealed');
+                    observer.unobserve(entry.target);
+                }
+            });
+        };
+
+        const revealObserver = new IntersectionObserver(revealCallback, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        // ── Parallax & UX Logic ─────────────────────────────────
+        let lastScrollY = window.scrollY;
+        const howSection = document.getElementById('how');
+        const stepsV = document.querySelector('.steps-progress-v');
+        const stepsFill = document.querySelector('.steps-progress-fill');
+        const icons = document.querySelectorAll('.step-icon');
+        
+        function handleStepProgress() {
+            if (!howSection || !stepsV || !stepsFill || !body.classList.contains('is-mobile') || icons.length < 3) return;
+            
+            const centerLine = window.innerHeight / 2;
+            
+            // 1. Dynamic Positioning & Clipping
+            const rect1 = icons[0].getBoundingClientRect();
+            const rect3 = icons[2].getBoundingClientRect();
+            
+            // Find Icon centers relative to the Container (steps-grid)
+            const gridRect = document.querySelector('.steps-grid').getBoundingClientRect();
+            const topPos = rect1.top - gridRect.top + (rect1.height / 2);
+            const totalHeight = (rect3.top + (rect3.height / 2)) - (rect1.top + (rect1.height / 2));
+            
+            // Apply physical limits to the container
+            stepsV.style.top = `${topPos}px`;
+            stepsV.style.height = `${totalHeight}px`;
+
+            // 2. Icon Activations
+            icons.forEach((icon) => {
+                const rect = icon.getBoundingClientRect();
+                const iconCenter = rect.top + (rect.height / 2);
+                
+                if (iconCenter <= centerLine) {
+                    icon.classList.add('is-active');
+                } else {
+                    icon.classList.remove('is-active');
+                }
+            });
+
+            // 3. Normalized Line Growth
+            const center1 = rect1.top + (rect1.height / 2);
+            const center3 = rect3.top + (rect3.height / 2);
+
+            let progress = (centerLine - center1) / (center3 - center1);
+            progress = Math.max(0, Math.min(1, progress));
+            
+            stepsFill.style.height = `${progress * 100}%`;
+        }
+        
+        function handleScroll() {
+            const currentScroll = window.scrollY;
+            
+            // 1. Parallax (Desktop only)
+            if (!body.classList.contains('is-mobile')) {
+                if (currentScroll < 1000) {
+                    const yPos = currentScroll * 0.4;
+                    hero.style.transform = `translateY(${yPos}px)`;
+                    hero.style.opacity = 1 - (currentScroll / 800);
+                }
+            } else {
+                // 2. Mobile Step Progress
+                handleStepProgress();
+            }
+
+            // 3. Mobile Nav Auto-Close
+            if (navCenter.classList.contains('active') && Math.abs(currentScroll - lastScrollY) > 50) {
+                navCenter.classList.remove('active');
+            }
+            
+            lastScrollY = currentScroll;
+        }
+
+        // ── Card Mouse Glow Effect ──────────────────────────────
+        function handleCardGlow(e) {
+            const card = e.currentTarget;
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        }
+
+        // ── Lenis Smooth Scroll ──────────────────────────────────
+        let lenis;
+        function initLenis() {
+            // Enable Lenis for ALL devices for consistent "Luxe" smoothing
+            lenis = new Lenis({
+                duration: 1.4,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                smoothWheel: true,
+                wheelMultiplier: 1.1,
+                touchMultiplier: 1.5, // Better feel for mobile swipes
+            });
+
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+        }
+
+        // ── Modal Handling ──────────────────────────────────────
+        const modal = document.getElementById('order-modal');
+        const openBtns = document.querySelectorAll('#open-reserve, .card-btn');
+        const closeBtn = document.querySelector('.close-modal');
+        const orderForm = document.getElementById('order-form');
+        const boxInput = document.getElementById('form-box-name');
+        const boxDisplay = document.getElementById('display-box-name');
+        const formStatus = document.getElementById('form-status');
+
+        openBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                // If clicked from a card, set the box name
+                const card = btn.closest('.product-card');
+                if (card) {
+                    const boxTitle = card.querySelector('h3').innerText;
+                    boxInput.value = boxTitle;
+                    if (boxDisplay) boxDisplay.innerText = boxTitle;
+                } else if (btn.id === 'open-reserve') {
+                    // Default if opened from navbar
+                    boxInput.value = "Match Box (Général)";
+                    if (boxDisplay) boxDisplay.innerText = "Match Box (Général)";
+                }
+                // 2. Disable expired match dates based on the 3-day deadline
+                const now = new Date();
+                const radios = modal.querySelectorAll('input[name="match_date"]');
+                let firstEnabled = null;
+
+                radios.forEach(radio => {
+                    const deadline = new Date(radio.dataset.deadline);
+                    if (now > deadline) {
+                        radio.disabled = true;
+                        radio.parentElement.classList.add('is-disabled');
+                    } else {
+                        radio.disabled = false;
+                        radio.parentElement.classList.remove('is-disabled');
+                        if (!firstEnabled) firstEnabled = radio;
+                    }
+                });
+
+                // Auto-select first available match
+                if (firstEnabled) firstEnabled.checked = true;
+
+                modal.classList.add('active');
+                body.style.overflow = 'hidden'; // prevent scroll
+            });
+        });
+
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+            body.style.overflow = '';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                body.style.overflow = '';
+            }
+        });
+
+        // ── Form Submission ──────────────────────────────────────
+        orderForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            formStatus.innerText = "Envoi en cours...";
+            formStatus.className = "form-status processing";
+
+            const formData = new FormData(orderForm);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('/functions/order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    formStatus.innerText = "✓ Pré-commande envoyée ! On vous contacte bientôt.";
+                    formStatus.className = "form-status success";
+                    orderForm.reset();
+                    setTimeout(() => {
+                        modal.classList.remove('active');
+                        body.style.overflow = '';
+                    }, 3000);
+                } else {
+                    throw new Error("Erreur serveur");
+                }
+            } catch (err) {
+                formStatus.innerText = "❌ Erreur. Réessayez ou contactez-nous.";
+                formStatus.className = "form-status error";
+            }
+        });
+
+        // ── Countdown Urgency Logic ─────────────────────────────
+        const matchesData = {{ matches | dump | safe }};
+        const ticker = document.getElementById('countdown-ticker');
+        const nextMatchSpan = document.getElementById('next-match-name');
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+
+        function startCountdown() {
+            if (!ticker) return;
+
+            // Find next valid deadline
+            const now = new Date();
+            const nextMatch = matchesData.find(m => new Date(m.deadlineDate) > now);
+
+            if (!nextMatch) {
+                ticker.style.display = 'none';
+                return;
+            }
+
+            const deadline = new Date(nextMatch.deadlineDate).getTime();
+            nextMatchSpan.innerText = nextMatch.label.split('(')[0].trim();
+            ticker.style.display = 'flex';
+
+            const timer = setInterval(() => {
+                const currentTime = new Date().getTime();
+                const diff = deadline - currentTime;
+
+                if (diff <= 0) {
+                    clearInterval(timer);
+                    startCountdown(); // Refresh to next match
+                    return;
+                }
+
+                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+                daysEl.innerText = d.toString().padStart(2, '0');
+                hoursEl.innerText = h.toString().padStart(2, '0');
+                minutesEl.innerText = m.toString().padStart(2, '0');
+                secondsEl.innerText = s.toString().padStart(2, '0');
+            }, 1000);
+        }
+
+        // ── Floating Contact Button ──────────────────────────────
+        const contactToggle = document.querySelector('.contact-toggle');
+        const contactMenu = document.querySelector('.floating-contact');
+        
+        if (contactToggle && contactMenu) {
+            contactToggle.addEventListener('click', () => {
+                contactMenu.classList.toggle('active');
+            });
+
+            // Close when clicking outside
+            window.addEventListener('click', (e) => {
+                if (!contactMenu.contains(e.target) && contactMenu.classList.contains('active')) {
+                    contactMenu.classList.remove('active');
+                }
+            });
+        }
+
+        // Initialize Everything
+        function init() {
+
+            startCountdown();
+            updateLayout();
+            initLenis();
+            
+            // Observe reveal items
+            document.querySelectorAll('.reveal-item').forEach(item => {
+                revealObserver.observe(item);
+            });
+
+            // Card mouse glow listeners
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.addEventListener('mousemove', handleCardGlow);
+            });
+
+            // Smooth Scroll for anchor links using Lenis if available
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // Don't scroll if it's the specific open-reserve ID
+                    if (this.id === 'open-reserve') return; 
+                    
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        // Close mobile menu immediately for better UX
+                        if (navCenter.classList.contains('active')) {
+                            navCenter.classList.remove('active');
+                        }
+
+                        if (lenis) {
+                            lenis.scrollTo(target, {
+                                offset: -nav.offsetHeight,
+                                duration: 1.8, // Slightly longer for luxurious feel
+                                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                            });
+                        } else {
+                            window.scrollTo({
+                                top: target.offsetTop - nav.offsetHeight,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                });
+            });
+        }
+
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('resize', updateLayout);
+        window.addEventListener('load', init);
+
+        // Immediate check for loader/image
+        if (posterImg && posterImg.complete) {
+            updateLayout();
+        } else if (posterImg) {
+            posterImg.addEventListener('load', updateLayout);
+        }
+    </script>
+</body>
+</html>

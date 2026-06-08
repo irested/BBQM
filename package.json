@@ -1,0 +1,16 @@
+{
+  "name": "match-box-313",
+  "version": "1.0.0",
+  "description": "Match Box 313 modern landing page with Eleventy",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx @11ty/eleventy --serve",
+    "build": "npx @11ty/eleventy"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^2.0.1"
+  },
+  "dependencies": {
+    "@11ty/eleventy-img": "^6.0.4"
+  }
+}
